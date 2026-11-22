@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini JPL Tournament – जोताई</title>
+<style>
+:root{--bg:#0b1d3a;--card:#13294f;--gold:#f5b700;--text:#f2f5fa;--mut:#9fb0cc;--ok:#22c55e;--bad:#ef4444;--line:#2c4777;--or:#ff7a00;--pu:#8b5cf6}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,#0b1d3a,#1d3f7a);padding:12px 14px;text-align:center;border-bottom:3px solid var(--gold);position:relative}
+header h1{margin:0;font-size:24px;color:var(--gold)}
+header p{margin:3px 0 0;color:var(--mut);font-size:14px}
+#startBar{margin-top:4px;font-size:15px;font-weight:600}
+.hdrBtns{display:flex;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.langBtn{background:linear-gradient(135deg,#f5b700,#ffdf6b);color:#111;border:0;padding:8px 14px;border-radius:20px;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap}
+.hbtn{background:#fff;color:#222;border:0;padding:8px 12px;border-radius:20px;font-size:13px;cursor:pointer;max-width:70vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px;background:#0a1830;position:sticky;top:0;z-index:5;scrollbar-width:thin}
+nav button{flex:none;white-space:nowrap;background:var(--card);color:var(--text);border:0;padding:9px 13px;border-radius:8px;font-size:14px;cursor:pointer}
+nav button.on{background:var(--gold);color:#000;font-weight:700}
+nav .langBtn{padding:9px 13px;border-radius:8px}
+main{max-width:1000px;margin:0 auto;padding:14px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:14px}
+h2,h3{margin-top:0}
+label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mut)}
+input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:#0d2145;color:var(--text);font-size:16px}
+input[type=checkbox]{width:auto}
+button.pri{background:var(--gold);color:#000;border:0;padding:12px;border-radius:8px;font-size:16px;font-weight:700;width:100%;margin-top:12px;cursor:pointer}
+button.sm{background:var(--line);color:#fff;border:0;padding:7px 11px;border-radius:6px;cursor:pointer;margin:2px;font-size:13px}
+button.ok{background:var(--ok);color:#000;font-weight:700}
+button.bad{background:var(--bad);color:#fff;font-weight:700}
+button.wa{background:#25d366;color:#000;font-weight:700}
+button:disabled{opacity:.4;cursor:not-allowed}
+a{color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:7px 5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{color:var(--gold)}
+.tw{overflow-x:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.pc{background:#0d2145;border-radius:12px;padding:12px;text-align:center;cursor:pointer;border:1px solid var(--line)}
+.pc img.pp{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--gold)}
+img.th{width:42px;height:42px;object-fit:cover;border-radius:6px;cursor:pointer}
+.lg{border-radius:50%;object-fit:cover;vertical-align:middle;background:#0d2145}
+.lg.ph{display:inline-flex;align-items:center;justify-content:center}
+.tag{padding:3px 9px;border-radius:12px;font-size:12px;display:inline-block;margin:2px}
+.paid{background:var(--ok);color:#000}.pend{background:#f59e0b;color:#000}.rej{background:var(--bad)}
+.role{background:var(--gold);color:#000}
+.livebadge{background:var(--bad);color:#fff;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.center{text-align:center}
+.msg{padding:9px;border-radius:8px;margin-top:8px;background:#0d2145}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:600px){.row,.row3{grid-template-columns:1fr}}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.btns button{min-width:46px;padding:12px 8px;font-size:17px;font-weight:700;background:var(--line);color:#fff;border:0;border-radius:8px;cursor:pointer}
+.btns button.sel{background:var(--gold);color:#000}
+.hidden{display:none!important}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:flex-start;justify-content:center;overflow:auto;z-index:50;padding:16px}
+.modal.on{display:flex}
+.modal .card{max-width:560px;width:100%;margin:auto}
+.modal img.big{max-width:100%;border-radius:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.stats div{background:#0d2145;border-radius:8px;padding:10px;text-align:center}
+.stats b{display:block;font-size:20px;color:var(--gold)}
+.stats small{color:var(--mut)}
+.score{font-size:30px;font-weight:800;color:var(--gold)}
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;border-radius:17px;background:var(--line);margin:2px;font-weight:700;padding:0 6px}
+.chip.r4{background:#16a34a}.chip.r6{background:var(--pu)}.chip.w{background:var(--bad)}.chip.x{background:#b45309}
+.bar{height:10px;background:#0d2145;border-radius:5px;overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#ff7a00)}
+.capbox{background:#0d2145;border-radius:10px;padding:10px}
+.cap-or{border-top:4px solid var(--or)}.cap-pu{border-top:4px solid var(--pu)}
+.hero{background:radial-gradient(circle at top,#1d3f7a,#0b1d3a);text-align:center;padding:22px 14px}
+.hero h2{color:var(--gold);font-size:26px;margin-bottom:6px}
+/* marquees */
+.mq{overflow:hidden;white-space:nowrap}
+.mq>div{display:inline-flex;gap:36px;animation:mq 40s linear infinite;will-change:transform}
+.mq:hover>div{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+.tick{background:#7f1d1d;color:#fff;padding:7px 0;font-size:14px;font-weight:600}
+.mq.sp{background:#fff;border-radius:10px;padding:8px 0;margin-bottom:14px}
+.mq.sp>div{gap:46px;animation-duration:30s}
+.spn{display:inline-flex;align-items:center;gap:8px;color:#111}
+.spn img{height:46px;max-width:120px;object-fit:contain}
+.spn.ttl img{height:62px}
+.spn small{font-weight:700}.spn em{font-size:11px;background:var(--gold);padding:2px 6px;border-radius:8px;font-style:normal}
+/* auction arena */
+.arena{position:relative;background:radial-gradient(ellipse at top,#1a2c5e 0%,#050a1c 70%);border:2px solid var(--gold);border-radius:16px;padding:18px;text-align:center;min-height:520px;overflow:hidden;display:flex;flex-direction:column}
+.arena:fullscreen{border-radius:0;min-height:100vh}
+.arena-top{display:flex;justify-content:space-between;align-items:center}
+.arena .photo{width:230px;height:230px;border-radius:50%;object-fit:cover;border:6px solid var(--gold);box-shadow:0 0 40px #f5b70066}
+.arena .nm{font-size:44px;font-weight:900;color:var(--gold);line-height:1.1;margin-top:8px}
+.arena .bid{font-size:78px;font-weight:900;color:#fff;text-shadow:0 0 25px #f5b700aa;line-height:1}
+.arena .lbl{color:var(--mut);font-size:18px}
+.arena-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 0}
+.arena .tick{background:#0a1228;border-top:2px solid var(--gold);margin:12px -18px -18px;padding:10px 0;font-size:16px}
+.arena .tick span{display:inline-flex;align-items:center;gap:8px}
+.stamp{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,10,28,.82);z-index:5;animation:fadeIn .3s}
+.stamp b{font-size:110px;letter-spacing:6px;border:10px solid;padding:0 30px;border-radius:14px;transform:rotate(-8deg);animation:slam .6s cubic-bezier(.2,2,.4,1)}
+.stamp.sold b{color:var(--ok);border-color:var(--ok)}
+.stamp.unsold b{color:var(--bad);border-color:var(--bad)}
+.stamp .tm{font-size:34px;font-weight:800;margin-top:18px;display:flex;align-items:center;gap:12px}
+.stamp .pr{font-size:54px;color:var(--gold);font-weight:900}
+@keyframes slam{0%{transform:scale(4) rotate(-8deg);opacity:0}100%{transform:scale(1) rotate(-8deg);opacity:1}}
+@keyframes fadeIn{from{opacity:0}}
+@media(max-width:600px){.arena .nm{font-size:30px}.arena .bid{font-size:52px}.arena .photo{width:150px;height:150px}.stamp b{font-size:64px}}
+@media print{header,nav,.noprint,.tick{display:none!important}body{background:#fff;color:#000}th,td{color:#000}}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div id="pubRoot">
+
+<header>
+  <h1>🏏 Mini JPL Tournament</h1>
+  <p data-t="📍 जोताई, पोरसा, मुरैना (म.प्र.)|📍 Jotai, Porsa, Morena (M.P.)"></p>
+  <div id="startBar"></div>
+  <div class="hdrBtns"><button class="langBtn"></button><button class="hbtn" id="authBtn"></button></div>
+</header>
+<div id="topTicker"></div>
+<nav>
+  <button class="langBtn"></button>
+  <button class="on" data-tab="home" data-t="होम|Home"></button>
+  <button data-tab="reg" data-t="रजिस्ट्रेशन|Register"></button>
+  <button data-tab="players" data-t="खिलाड़ी|Players"></button>
+  <button data-tab="teams" data-t="टीमें|Teams"></button>
+  <button data-tab="live" data-t="लाइव स्कोर|Live Score"></button>
+  <button data-tab="auction" data-t="लाइव ऑक्शन|Live Auction"></button>
+  <button data-tab="myteam" id="myTeamBtn" class="hidden" data-t="मेरी टीम|My Team"></button>
+  <button data-tab="sched" data-t="शेड्यूल|Schedule"></button>
+  <button data-tab="points" data-t="पॉइंट्स व रैंकिंग|Points & Rankings"></button>
+  <button data-tab="fan" data-t="फैन ज़ोन|Fan Zone"></button>
+  <button data-tab="gallery" data-t="गैलरी|Gallery"></button>
+  <button data-tab="poster" data-t="पोस्टर|Poster"></button>
+  <button data-tab="coach" data-t="कोच|Coaches"></button>
+</nav>
+<main>
+
+<section id="home" class="on">
+  <div class="card hero"><h2 data-t="मिनी JPL टूर्नामेंट में आपका स्वागत है|Welcome to Mini JPL Tournament"></h2><div id="heroInfo"></div></div>
+  <div class="card"><h3 data-t="🔴 लाइव / अगला मैच|🔴 Live / Next Match"></h3><div id="homeMatch"></div></div>
+  <div id="homeSp"></div>
+  <div class="card"><h3 data-t="🎯 फैन ज़ोन|🎯 Fan Zone"></h3><div class="fz"></div></div>
+  <div class="card stats" id="homeStats"></div>
+</section>
+
+<section id="reg">
+  <div class="card" id="regCard">
+    <h2 data-t="खिलाड़ी रजिस्ट्रेशन|Player Registration"></h2>
+    <form id="regForm">
+      <label data-t="खिलाड़ी का नाम *|Player Name *"></label><input id="name" required>
+      <div class="row">
+        <div><label data-t="उम्र *|Age *"></label><input id="age" type="number" min="5" max="70" required></div>
+        <div><label data-t="गाँव *|Village *"></label><input id="village" required></div>
+      </div>
+      <div class="row">
+        <div><label data-t="मोबाइल नंबर *|Mobile Number *"></label><input id="mobile" type="tel" pattern="[0-9]{10}" maxlength="10" required></div>
+        <div><label data-t="रोल *|Role *"></label>
+          <select id="role"><option value="bat" data-t="बल्लेबाज|Batter"></option><option value="bowl" data-t="गेंदबाज|Bowler"></option><option value="all" data-t="ऑलराउंडर|All-rounder"></option></select></div>
+      </div>
+      <label data-t="टी-शर्ट साइज़ *|T-Shirt Size *"></label>
+      <select id="tsize"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>XXL</option></select>
+      <label data-t="पासपोर्ट फोटो *|Passport Photo *"></label><input id="photo" type="file" accept="image/*" required>
+      <div class="msg center" id="payBox"></div>
+      <label data-t="पेमेंट का स्क्रीनशॉट *|Payment Screenshot *"></label><input id="shot" type="file" accept="image/*" required>
+      <button class="pri" id="regBtn" data-t="रजिस्टर करें|Register"></button>
+    </form>
+    <div id="regMsg"></div>
+  </div>
+  <div class="card center hidden" id="doneCard">
+    <h2 data-t="✅ रजिस्ट्रेशन हो गया!|✅ Registration Submitted!"></h2>
+    <p style="color:var(--mut)" data-t="एडमिन पेमेंट वेरिफाई करके आपको ऑक्शन में जोड़ देंगे।|Admin will verify your payment and add you to the auction pool."></p>
+    <canvas id="cardCanvas" style="max-width:100%;width:380px;border-radius:12px"></canvas>
+    <div class="row"><button class="pri" id="dlCard" data-t="⬇️ PNG डाउनलोड|⬇️ Download PNG"></button><button class="pri wa" id="shCard" data-t="WhatsApp पर शेयर करें|Share on WhatsApp"></button></div>
+    <a id="waAdmin" target="_blank"><button class="pri" data-t="एडमिन को WhatsApp सूचना|Notify Admin on WhatsApp"></button></a>
+    <button class="pri" id="newReg" data-t="➕ नया रजिस्ट्रेशन (किसी और का)|➕ New Registration (someone else)"></button>
+  </div>
+</section>
+
+<section id="players">
+  <div class="card"><h2 data-t="सभी खिलाड़ी|All Players"></h2>
+    <div class="row">
+      <div><label data-t="टीम|Team"></label><select id="fTeam"></select></div>
+      <div><label data-t="रोल|Role"></label><select id="fRole"><option value="" data-t="सभी|All"></option><option value="bat" data-t="बल्लेबाज|Batter"></option><option value="bowl" data-t="गेंदबाज|Bowler"></option><option value="all" data-t="ऑलराउंडर|All-rounder"></option></select></div>
+    </div></div>
+  <div class="grid" id="pGrid"></div>
+</section>
+
+<section id="teams"><div id="teamGrid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))"></div></section>
+
+<section id="live">
+  <div class="card"><label data-t="मैच चुनें|Select Match"></label><select id="liveMatch"></select><div id="liveBoard" style="margin-top:12px"></div></div>
+  <div class="card"><h3 data-t="🕒 हाल की गेंदें|🕒 Recent Balls"></h3><div id="recent"></div></div>
+  <div class="card"><h3 data-t="🎙️ लाइव कमेंट्री|🎙️ Live Commentary"></h3><div id="commentary"></div></div>
+  <div class="card"><h3 data-t="🎯 फैन ज़ोन|🎯 Fan Zone"></h3><div class="fz"></div></div>
+</section>
+
+<section id="auction">
+  <div class="arena" id="arena">
+    <div class="arena-top"><span id="aucBadge" class="tag"></span><span><button class="sm" id="soundBtn">🔊</button><button class="sm" id="fsBtn">⛶</button></span></div>
+    <div class="arena-stage" id="aucStage"></div>
+    <div id="stampBox"></div>
+    <div id="aucTicker"></div>
+  </div>
+  <div id="aucSp" style="margin-top:14px"></div>
+</section>
+
+<section id="myteam"><div class="card" id="myTeamBox"></div></section>
+
+<section id="sched"><div class="card"><h2 data-t="मैच शेड्यूल|Match Schedule"></h2><div class="tw"><table id="matchTbl"></table></div></div></section>
+
+<section id="points">
+  <div class="card"><h2 data-t="पॉइंट्स टेबल|Points Table"></h2><div class="tw"><table id="ptsTbl"></table></div></div>
+  <div class="card"><h3 data-t="लीडरबोर्ड|Leaderboards"></h3><div id="caps" class="row"></div></div>
+  <div class="card"><h3 data-t="🏅 प्लेयर रैंकिंग|🏅 Player Ranking"></h3><div class="tw"><table id="rankTbl"></table></div><small style="color:var(--mut)" data-t="पॉइंट्स = रन + विकेट×25 + (कैच/स्टंप/रन आउट)×10 + चौके + छक्के×2|Points = runs + wickets×25 + (catch/stumping/run-out)×10 + fours + sixes×2"></small></div>
+</section>
+
+<section id="fan"><div class="card"><h2 data-t="🎯 फैन ज़ोन – वोट करें|🎯 Fan Zone – Vote Now"></h2><div class="fz"></div></div></section>
+
+<section id="gallery">
+  <div class="card">
+    <h3 data-t="फोटो अपलोड करें|Upload Photo"></h3>
+    <div class="row"><div><label data-t="कैप्शन|Caption"></label><input id="gCap"></div><div><label data-t="फोटो|Photo"></label><input id="gFile" type="file" accept="image/*"></div></div>
+    <button class="pri" id="gUp" data-t="अपलोड करें|Upload"></button>
+    <label data-t="या वीडियो/रील का लिंक|Or a video/reel link"></label>
+    <div class="row"><input id="gLink" placeholder="https://..."><button class="sm" id="gLinkAdd" data-t="लिंक जोड़ें|Add Link"></button></div>
+    <p style="color:var(--mut);font-size:13px" data-t="अपलोड एडमिन की मंज़ूरी के बाद दिखेगा।|Uploads appear after admin approval."></p>
+    <div id="gMsg"></div>
+  </div>
+  <div class="grid" id="gGrid"></div>
+</section>
+
+<section id="poster">
+  <div class="card">
+    <h3 data-t="मैच पोस्टर|Match Poster"></h3>
+    <label data-t="मैच चुनें|Select Match"></label><select id="posterMatch"></select>
+    <button class="pri" id="posterGen" data-t="पोस्टर बनाएं|Generate Poster"></button>
+    <div class="center" style="margin-top:12px"><canvas id="posterCanvas" style="max-width:100%;width:420px;border-radius:12px"></canvas></div>
+    <div class="row hidden" id="posterBtns"><button class="pri" id="posterDl" data-t="⬇️ डाउनलोड|⬇️ Download"></button><button class="pri wa" id="posterWa" data-t="WhatsApp पर शेयर|Share on WhatsApp"></button></div>
+  </div>
+</section>
+
+<section id="coach"><div class="card"><h2 data-t="कोच|Coaches"></h2><div id="coachList"></div></div></section>
+</main>
+
+<footer class="center" style="padding:18px;color:var(--mut);font-size:13px">Mini JPL • Jotai, Porsa, Morena (M.P.) • <a href="#admin" data-t="🔒 एडमिन|🔒 Admin"></a></footer>
+<div class="modal" id="pModal"><div class="card" id="pBody"></div></div>
+
+
+</div>
+<div id="adminRoot" class="hidden">
+
+<div id="gate" style="max-width:420px;margin:60px auto;padding:16px">
+  <div class="card center">
+    <h2 style="color:var(--gold)" data-t="🔒 JPL एडमिन|🔒 JPL Admin"></h2>
+    <p style="color:var(--mut)" data-t="केवल टूर्नामेंट एडमिन के लिए। Google से लॉगिन करें।|Restricted to the Tournament Admin. Sign in with Google."></p>
+    <button class="pri" id="gBtn" data-t="🔵 Google से लॉगिन|🔵 Sign in with Google"></button>
+    <div class="hdrBtns"><button class="langBtn"></button></div>
+    <div id="agMsg"></div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header style="padding:8px 12px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+  <div><h1 style="font-size:19px">🏏 JPL Admin</h1><small id="who" style="color:var(--mut)"></small></div>
+  <div><button class="langBtn"></button> <a class="hbtn" href="#" style="text-decoration:none" data-t="🏠 वेबसाइट|🏠 Website"></a> <button class="hbtn" id="logout" data-t="लॉगआउट|Logout"></button></div>
+</header>
+<nav>
+  <button class="langBtn"></button>
+  <button class="on" data-tab="tPlayers" data-t="खिलाड़ी|Players"></button>
+  <button data-tab="tAuction" data-t="ऑक्शन|Auction"></button>
+  <button data-tab="tScore" data-t="स्कोरिंग|Scoring"></button>
+  <button data-tab="tMatches" data-t="मैच/शेड्यूल|Matches"></button>
+  <button data-tab="tTeams" data-t="टीमें|Teams"></button>
+  <button data-tab="tMedia" data-t="मीडिया/स्पॉन्सर|Media & Sponsors"></button>
+  <button data-tab="tSettings" data-t="सेटिंग्स|Settings"></button>
+  <button data-tab="tScan" data-t="QR स्कैनर|QR Scanner"></button>
+</nav>
+<main>
+
+<!-- PLAYERS -->
+<section id="tPlayers" class="on">
+  <div class="card">
+    <div class="noprint"><button class="sm" id="csvBtn" data-t="⬇️ Excel/CSV|⬇️ Export Excel/CSV"></button> <button class="sm" id="printBtn" data-t="🖨️ ऑक्शन शीट (PDF)|🖨️ Auction Sheet (PDF)"></button></div>
+    <h3 style="margin-top:10px" data-t="रजिस्टर्ड खिलाड़ी|Registered Players"></h3>
+    <div id="pStats"></div>
+    <select id="pFilter" style="margin:8px 0"><option value="" data-t="सभी|All"></option><option value="pending" data-t="पेंडिंग|Pending"></option><option value="paid" data-t="अप्रूव्ड (Paid)|Approved (Paid)"></option><option value="rejected" data-t="रिजेक्टेड|Rejected"></option></select>
+    <div class="tw"><table id="plTbl"></table></div>
+  </div>
+  <div class="card noprint">
+    <h3 data-t="➕ एडमिन से नया खिलाड़ी रजिस्टर करें|➕ Register a Player (Admin)"></h3>
+    <div class="row"><div><label data-t="खिलाड़ी का नाम *|Player Name *"></label><input id="apName"></div><div><label data-t="उम्र *|Age *"></label><input id="apAge" type="number" min="5" max="70"></div></div>
+    <div class="row"><div><label data-t="गाँव *|Village *"></label><input id="apVillage"></div><div><label data-t="मोबाइल नंबर *|Mobile *"></label><input id="apMobile" type="tel" maxlength="10"></div></div>
+    <div class="row3"><div><label data-t="रोल|Role"></label><select id="apRole"><option value="bat" data-t="बल्लेबाज|Batter"></option><option value="bowl" data-t="गेंदबाज|Bowler"></option><option value="all" data-t="ऑलराउंडर|All-rounder"></option></select></div>
+      <div><label data-t="टी-शर्ट|T-Shirt"></label><select id="apTsize"><option>S</option><option>M</option><option selected>L</option><option>XL</option><option>XXL</option></select></div>
+      <div><label data-t="एंट्री फीस का पेमेंट|Entry fee payment"></label><select id="apFee"><option value="unpaid" data-t="अभी नहीं (बाद में बदल सकते हैं)|Not yet (can change later)"></option><option value="paid" data-t="पेमेंट हो गया ✔|Paid ✔"></option></select></div></div>
+    <label data-t="पासपोर्ट फोटो *|Passport Photo *"></label><input id="apPhoto" type="file" accept="image/*">
+    <div class="btns"><button class="pri" id="apSave" data-t="✅ रजिस्टर करें (अप्रूव्ड)|✅ Register (Approved)"></button><button class="sm" id="apNew" data-t="नया फॉर्म|New form"></button></div>
+    <div id="apMsg"></div>
+    <div id="apOut" class="hidden" style="margin-top:10px"><canvas id="apCv" style="max-width:100%;width:340px;border-radius:12px"></canvas><div class="row"><button class="sm" id="apDl">⬇️ PNG</button><button class="sm wa" id="apSh">WhatsApp</button></div></div>
+  </div>
+  <div class="card noprint">
+    <h3 data-t="खिलाड़ी एडिट / स्टैट्स|Edit Player / Stats"></h3>
+    <select id="sPlayer"></select>
+    <div class="row"><div><label data-t="रोल|Role"></label><select id="sRole"><option value="bat" data-t="बल्लेबाज|Batter"></option><option value="bowl" data-t="गेंदबाज|Bowler"></option><option value="all" data-t="ऑलराउंडर|All-rounder"></option></select></div>
+      <div><label data-t="टीम|Team"></label><select id="sTeam"></select></div></div>
+    <label data-t="गाँव|Village"></label><input id="sVillage">
+    <div class="row3"><div><label data-t="मैच|Matches"></label><input id="sMatches" type="number" min="0"></div><div><label data-t="रन (पुराने)|Runs (manual)"></label><input id="sRuns" type="number" min="0"></div><div><label data-t="गेंदें|Balls"></label><input id="sBalls" type="number" min="0"></div></div>
+    <div class="row3"><div><label data-t="विकेट|Wickets"></label><input id="sWkts" type="number" min="0"></div><div><label data-t="ओवर|Overs"></label><input id="sOvers" type="number" min="0" step="0.1"></div><div><label data-t="दिए रन|Runs Given"></label><input id="sRunsGiven" type="number" min="0"></div></div>
+    <button class="pri" id="sSaveP" data-t="सेव करें|Save"></button><div id="sMsg"></div>
+  </div>
+</section>
+
+<!-- AUCTION -->
+<section id="tAuction">
+  <div class="card">
+    <h3 data-t="ऑक्शन सिस्टम|Auction System"></h3>
+    <div id="aucState" style="font-size:20px;font-weight:700"></div>
+    <button class="pri" id="aucToggle"></button>
+    <p style="color:var(--mut);font-size:13px" data-t="बंद करने पर पब्लिक स्क्रीन पर 'ऑक्शन बंद' दिखेगा और बोली नहीं लग पाएगी। डेटा सुरक्षित रहता है।|When OFF, the public screen shows 'Auction closed' and bidding is blocked. Data stays safe."></p>
+  </div>
+  <div class="card">
+    <h3 data-t="खिलाड़ी चुनें|Select Player"></h3>
+    <div id="aCounts" style="color:var(--mut)"></div>
+    <select id="aPool"></select>
+    <div class="btns"><button class="sm" id="aStart" data-t="▶ नीलामी शुरू|▶ Start Bidding"></button><button class="sm" id="aRandom" data-t="🎲 रैंडम अगला|🎲 Random Next"></button><button class="sm" id="aReauc" data-t="♻️ अनबिके दोबारा|♻️ Re-Auction Unsold"></button><button class="sm" id="aClear" data-t="स्क्रीन साफ|Clear Screen"></button></div>
+  </div>
+  <div class="card" id="aCtlCard"><div id="aCtl"></div></div>
+  <div class="card">
+    <h3 data-t="👥 सभी Approved खिलाड़ी|👥 All Approved Players"></h3>
+    <div class="row"><input id="alQ" placeholder="🔎 नाम / Name"><select id="alF"><option value="all" data-t="सभी|All"></option><option value="new" data-t="नए (अभी नीलामी नहीं हुई)|New (not auctioned yet)"></option><option value="sold" data-t="पहले बिके|Already Sold"></option><option value="unsold" data-t="अनबिके|Unsold"></option></select></div>
+    <div id="aList" style="margin-top:8px"></div>
+  </div>
+</section>
+
+<!-- SCORING -->
+<section id="tScore">
+  <div class="card">
+    <h3 data-t="बॉल-बाय-बॉल स्कोरिंग|Ball-by-Ball Scoring"></h3>
+    <div class="row"><div><label data-t="मैच|Match"></label><select id="scMatch"></select></div><div><label data-t="पारी|Innings"></label><select id="scInn"><option value="1" data-t="पहली पारी|1st Innings"></option><option value="2" data-t="दूसरी पारी|2nd Innings"></option></select></div></div>
+    <div class="row"><div><label data-t="बैटिंग टीम|Batting Team"></label><select id="scBat"></select></div><div><label data-t="स्ट्राइकर|Striker"></label><select id="scBatter"></select></div></div>
+    <div class="row3"><div><label data-t="गेंदबाज|Bowler"></label><select id="scBowler"></select></div><div><label data-t="आउट का तरीका|Dismissal"></label><select id="scDis"><option value="bowled" data-t="बोल्ड|Bowled"></option><option value="caught" data-t="कैच आउट|Caught"></option><option value="lbw" data-t="एलबीडब्ल्यू|LBW"></option><option value="runout" data-t="रन आउट|Run Out"></option><option value="stumped" data-t="स्टंप्ड|Stumped"></option><option value="hitwicket" data-t="हिट विकेट|Hit Wicket"></option></select></div><div><label data-t="फील्डर (कैच/रन आउट/स्टंप)|Fielder (catch/run out/stumping)"></label><select id="scFielder"></select></div></div>
+    <label data-t="नोट (वैकल्पिक)|Note (optional)"></label><input id="scNote">
+    <div class="btns" id="scBtns"><button data-r="0">0</button><button data-r="1">1</button><button data-r="2">2</button><button data-r="3">3</button><button data-r="4">4</button><button data-r="6">6</button><button data-x="wd">WD</button><button data-x="nb">NB</button><button data-w="1" class="bad">OUT</button></div>
+    <div class="btns"><button class="sm" id="scUndo" data-t="↩️ आखिरी बॉल हटाएं|↩️ Undo Last Ball"></button><button class="sm bad" id="scDraw" data-t="🛑 मैच ड्रॉ करें (कारण)|🛑 Draw match (reason)"></button></div>
+    <div id="scInfo" style="margin-top:10px"></div>
+  </div>
+</section>
+
+<!-- MATCHES -->
+<section id="tMatches">
+  <div class="card">
+    <h3 data-t="⚙️ शेड्यूल जनरेटर (लीग + सेमी + फाइनल)|⚙️ Schedule Generator (League + Semis + Final)"></h3>
+    <label data-t="टीमें चुनें|Select Teams"></label><div id="genTeams"></div>
+    <div class="row3"><div><label data-t="पहला मैच (तारीख/समय)|First match (date/time)"></label><input id="genStart" type="datetime-local"></div><div><label data-t="मैचों के बीच घंटे|Hours between matches"></label><input id="genGap" type="number" value="2" min="0.5" step="0.5"></div><div><label data-t="ओवर प्रति पारी|Overs per innings"></label><input id="genOvers" type="number" min="1"></div></div>
+    <div class="row"><div><label data-t="ग्राउंड|Ground"></label><select id="genGround"></select></div><div><label><input type="checkbox" id="genSemi" checked> <span data-t="सेमी-फाइनल + फाइनल जोड़ें|Add Semi-Finals + Final"></span></label></div></div>
+    <button class="pri" id="genBtn" data-t="प्रीव्यू बनाएं|Generate Preview"></button>
+    <div id="genPreview"></div>
+  </div>
+  <div class="card">
+    <h3 data-t="✍️ मैच खुद बनाएं|✍️ Create Match Manually"></h3>
+    <div class="row3"><div><label data-t="टीम 1|Team 1"></label><select id="mkA"></select></div><div><label data-t="टीम 2|Team 2"></label><select id="mkB"></select></div><div><label data-t="स्टेज|Stage"></label><select id="mkS"><option value="league" data-t="लीग|League"></option><option value="semi" data-t="सेमी-फाइनल|Semi-Final"></option><option value="final" data-t="फाइनल|Final"></option></select></div></div>
+    <div class="row3"><div><label data-t="तारीख/समय|Date/Time"></label><input id="mkW" type="datetime-local"></div><div><label data-t="ग्राउंड|Ground"></label><select id="mkG"></select></div><div><label data-t="ओवर|Overs"></label><input id="mkO" type="number" min="1"></div></div>
+    <button class="pri" id="mkSave" data-t="मैच जोड़ें|Add Match"></button>
+  </div>
+  <div class="card">
+    <h3 data-t="⏱ ऑटो नियम|⏱ Auto Rules"></h3>
+    <label data-t="स्कोर अपडेट न होने पर ऑटो ड्रॉ (मिनट)|Auto-draw if no score update for (minutes)"></label>
+    <div class="row"><input id="drMin" type="number" min="5"><button class="sm ok" id="drSave" data-t="सेव|Save"></button></div>
+    <small style="color:var(--mut)" data-t="टीमें, टॉस और XI तय होने पर मैच अपने-आप LIVE होगा। यह एडमिन पैनल खुला रहने पर चलता है।|Matches go LIVE automatically at their time once teams, toss and XI are set. This runs while the admin panel is open."></small>
+  </div>
+  <div class="card">
+    <h3 data-t="सभी मैच|All Matches"></h3>
+    <div class="btns"><button class="sm" id="fillSemi" data-t="सेमी-फाइनल टीमें भरें (पॉइंट्स से)|Fill Semi-Finals (from points)"></button><button class="sm" id="fillFinal" data-t="फाइनल टीमें भरें|Fill Final"></button><button class="sm bad" id="mDelAll" data-t="सभी मैच हटाएं|Delete All Matches"></button></div>
+    <div id="mList"></div>
+  </div>
+</section>
+
+<!-- TEAMS -->
+<section id="tTeams">
+  <div class="card">
+    <h3 data-t="नई टीम बनाएं|Create Team"></h3>
+    <div class="row"><div><label data-t="टीम का नाम *|Team Name *"></label><input id="tmName"></div><div><label data-t="कप्तान|Captain"></label><input id="tmCap"></div></div>
+    <div class="row"><div><label data-t="कोच|Coach"></label><select id="tmCoach"></select></div><div><label data-t="मालिक का नाम|Owner Name"></label><input id="tmOwnerName"></div></div>
+    <div class="row"><div><label data-t="मालिक का Gmail (लॉगिन के लिए)|Owner Gmail (for login)"></label><input id="tmOwner" type="email"></div><div><label data-t="पर्स (₹)|Purse (₹)"></label><input id="tmPurse" type="number"></div></div>
+    <label data-t="टीम लोगो|Team Logo"></label><input id="tmLogo" type="file" accept="image/*">
+    <button class="pri" id="tmAdd" data-t="टीम बनाएं|Create Team"></button>
+  </div>
+  <div class="card"><h3 data-t="टीमें|Teams"></h3><div id="tmList"></div></div>
+</section>
+
+<!-- MEDIA -->
+<section id="tMedia">
+  <div class="card">
+    <h3 data-t="🤝 स्पॉन्सर मैनेजर|🤝 Sponsors Manager"></h3>
+    <div class="row3"><div><label data-t="नाम|Name"></label><input id="spName"></div><div><label data-t="प्रकार|Tier"></label><select id="spTier"><option value="title" data-t="टाइटल स्पॉन्सर|Title Sponsor"></option><option value="co" data-t="को-स्पॉन्सर|Co-Sponsor"></option></select></div><div><label data-t="लोगो|Logo"></label><input id="spLogo" type="file" accept="image/*"></div></div>
+    <button class="sm" id="spAdd" data-t="जोड़ें|Add"></button><div id="spList"></div>
+  </div>
+  <div class="card">
+    <h3 data-t="📰 ब्रेकिंग न्यूज़ टिकर|📰 Breaking News Ticker"></h3>
+    <div class="row"><input id="nwText"><button class="sm" id="nwAdd" data-t="जोड़ें|Add"></button></div><div id="nwList"></div>
+  </div>
+  <div class="card">
+    <h3 data-t="🎯 पोल|🎯 Polls"></h3>
+    <label data-t="सवाल|Question"></label><input id="pQ"><label data-t="विकल्प (कॉमा से अलग)|Options (comma separated)"></label><input id="pOpts">
+    <button class="sm" id="pAdd" data-t="पोल जोड़ें|Add Poll"></button><div id="pList"></div>
+  </div>
+  <div class="card">
+    <h3 data-t="🖼️ गैलरी मॉडरेशन|🖼️ Gallery Moderation"></h3>
+    <h4 data-t="मंज़ूरी का इंतज़ार|Pending Approval"></h4><div id="gPending"></div>
+    <h4 data-t="अप्रूव्ड|Approved"></h4><div id="gApproved"></div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section id="tSettings">
+  <div class="card">
+    <h3 data-t="टूर्नामेंट सेटिंग्स|Tournament Settings"></h3>
+    <div class="row3"><div><label data-t="एंट्री फीस (₹)|Entry Fee (₹)"></label><input id="setEntry" type="number"></div><div><label>UPI ID</label><input id="setUpi"></div><div><label data-t="UPI पर नाम|UPI Payee Name"></label><input id="setUpiName"></div></div>
+    <div class="row"><div><label data-t="पेमेंट QR इमेज (वैकल्पिक)|Payment QR image (optional)"></label><input id="setQr" type="file" accept="image/*"></div><div><label data-t="एडमिन WhatsApp (91 के साथ)|Admin WhatsApp (with 91)"></label><input id="setWa"></div></div>
+    <div class="row3"><div><label data-t="शुरू होने की तारीख|Start Date"></label><input id="setDate" type="date"></div><div><label data-t="डिफ़ॉल्ट पर्स (₹)|Default Purse (₹)"></label><input id="setPurse" type="number"></div><div><label data-t="बेस प्राइस (₹)|Base Price (₹)"></label><input id="setBase" type="number"></div></div>
+    <div class="row3"><div><label data-t="स्क्वाड साइज़|Squad Size"></label><input id="setSquad" type="number"></div><div><label data-t="डिफ़ॉल्ट ओवर|Default Overs"></label><input id="setOvers" type="number"></div><div><label data-t="विकेट सीमा (ऑल आउट)|Wickets limit (all out)"></label><input id="setWk" type="number"></div></div>
+    <button class="pri" id="setSave" data-t="सेटिंग्स सेव करें|Save Settings"></button><div id="setMsg"></div>
+  </div>
+  <div class="card"><h3 data-t="ग्राउंड|Grounds"></h3>
+    <div class="row"><div><label data-t="नाम|Name"></label><input id="gName"></div><div><label data-t="पता|Address"></label><input id="gAddr"></div></div>
+    <button class="sm" id="gAdd" data-t="जोड़ें|Add"></button><button class="sm" id="gDefault" data-t="पोरसा + जोताई ग्राउंड जोड़ें|Add Porsa + Jotai Grounds"></button><div id="gList"></div></div>
+  <div class="card"><h3 data-t="कोच|Coaches"></h3>
+    <div class="row"><div><label data-t="नाम|Name"></label><input id="cName"></div><div><label data-t="मोबाइल|Mobile"></label><input id="cPhone"></div></div>
+    <button class="sm" id="cAdd" data-t="जोड़ें|Add"></button><button class="sm" id="cSubodh" data-t="सुबोध को कोच जोड़ें|Add Subodh as Coach"></button><div id="cList"></div></div>
+</section>
+
+<!-- SCANNER -->
+<section id="tScan">
+  <div class="card">
+    <h3 data-t="QR स्कैनर / मैनुअल वेरिफिकेशन|QR Scanner / Manual Verify"></h3>
+    <div class="row"><input id="scanId" data-tp="खिलाड़ी ID डालें (JPL-XXXXX)|Enter Player ID (JPL-XXXXX)"><button class="sm" id="scanManual" data-t="चेक करें|Check"></button></div>
+    <video id="scanVid" playsinline style="width:100%;max-width:360px;border-radius:10px;background:#000;margin-top:10px"></video>
+    <div class="btns"><button class="sm" id="scanStart" data-t="📷 कैमरा शुरू|📷 Start Camera"></button><button class="sm" id="scanStop" data-t="बंद करें|Stop"></button></div>
+    <div id="scanRes"></div>
+  </div>
+</section>
+</main>
+</div>
+
+<div class="modal" id="modal"><div class="card" id="modalBody"></div></div>
+
+
+</div>
+<script type="module">
+// ===== Mini JPL – shared module (Firebase, language, stats engine, drawing helpers) =====
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import * as FS from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import * as AU from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const { collection, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, onSnapshot, increment, writeBatch } = FS;
+const { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = AU;
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA64kO5vHIRwGK0jwGYQhJKPYKGnbTgU9Y",
+  authDomain: "mini-jpl-tournament.firebaseapp.com",
+  projectId: "mini-jpl-tournament",
+  storageBucket: "mini-jpl-tournament.firebasestorage.app",
+  messagingSenderId: "311718972291",
+  appId: "1:311718972291:web:66f5488375d044b2fd04b6"
+};
+const app = initializeApp(firebaseConfig);
+const db = FS.getFirestore(app);
+const auth = AU.getAuth(app);
+
+const ADMIN_EMAIL = "singhvishvanath69@gmail.com";
+const DEFAULT_WA = "917566062677";
+
+// ---------- basics ----------
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pidOf = id => "JPL-" + String(id).slice(0, 5).toUpperCase();
+const rupee = n => "₹" + (Number(n) || 0).toLocaleString("en-IN");
+const oversOf = l => `${Math.floor(l / 6)}.${l % 6}`;
+const loadImg = src => new Promise(res => { if (!src) return res(null); const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+function keepSel(id, html) { const el = $(id); if (!el) return; const v = el.value; el.innerHTML = html; if (v && [...el.options].some(o => o.value === v)) el.value = v; }
+function compress(file, max, q, type = "image/jpeg") {
+  return new Promise((res, rej) => {
+    const img = new Image(), r = new FileReader();
+    r.onload = () => { img.src = r.result; };
+    img.onload = () => {
+      const s = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement("canvas"); c.width = img.width * s; c.height = img.height * s;
+      const x = c.getContext("2d");
+      if (type === "image/jpeg") { x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); }
+      x.drawImage(img, 0, 0, c.width, c.height);
+      res(c.toDataURL(type, q));
+    };
+    img.onerror = rej; r.onerror = rej; r.readAsDataURL(file);
+  });
+}
+function downloadCanvas(cv, name) { const a = document.createElement("a"); a.download = name; a.href = cv.toDataURL("image/png"); a.click(); }
+async function shareCanvas(cv, name, text) {
+  const blob = await new Promise(r => cv.toBlob(r, "image/png"));
+  const file = new File([blob], name, { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], text }); return; } catch (e) { if (e.name === "AbortError") return; } }
+  downloadCanvas(cv, name);
+  window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank");
+}
+
+// ---------- language ----------
+let lang = localStorage.getItem("jpl_lang") || "hi";
+const subs = [];
+const getLang = () => lang;
+const tr = (hi, en) => lang === "hi" ? hi : en;
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach(e => { const p = e.dataset.t.split("|"); e.textContent = lang === "hi" ? p[0] : (p[1] ?? p[0]); });
+  document.querySelectorAll("[data-tp]").forEach(e => { const p = e.dataset.tp.split("|"); e.placeholder = lang === "hi" ? p[0] : (p[1] ?? p[0]); });
+  document.querySelectorAll(".langBtn").forEach(b => b.textContent = lang === "hi" ? "🌐 हिंदी | EN" : "🌐 EN | हिंदी");
+}
+const onLang = fn => subs.push(fn);
+function toggleLang() { lang = lang === "hi" ? "en" : "hi"; localStorage.setItem("jpl_lang", lang); applyLang(); subs.forEach(f => f()); }
+const fmtDate = s => s ? new Date(s + "T00:00:00").toLocaleDateString(lang === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "long", year: "numeric" }) : "";
+function fmtWhen(m) {
+  if (m.whenISO) return new Date(m.whenISO).toLocaleString(lang === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+  return m.when || "";
+}
+
+// ---------- labels ----------
+const RL = { bat: ["बल्लेबाज", "Batter"], bowl: ["गेंदबाज", "Bowler"], all: ["ऑलराउंडर", "All-rounder"] };
+const LEG = { "बल्लेबाज": "bat", "गेंदबाज": "bowl", "ऑलराउंडर": "all" };
+const roleKey = r => RL[r] ? r : (LEG[r] || "bat");
+const roleLabel = r => tr(...RL[roleKey(r)]);
+const DIS = { bowled: ["बोल्ड", "Bowled"], caught: ["कैच आउट", "Caught"], lbw: ["एलबीडब्ल्यू", "LBW"], runout: ["रन आउट", "Run Out"], stumped: ["स्टंप्ड", "Stumped"], hitwicket: ["हिट विकेट", "Hit Wicket"] };
+const dismissalLabel = k => tr(...(DIS[k] || DIS.bowled));
+const stageLabel = s => s === "semi" ? tr("सेमी-फाइनल", "Semi-Final") : s === "final" ? tr("फाइनल", "Final") : tr("लीग", "League");
+
+// ---------- data store ----------
+const S = { teams: [], players: [], matches: [], balls: [], grounds: [], coaches: [], polls: [], media: [], sponsors: [], news: [], owners: [], settings: {}, live: null, priv: {} };
+const ts = d => d.createdAt?.seconds ?? (d.t ? d.t / 1000 : 0);
+const arr = s => s.docs.map(d => ({ id: d.id, ...d.data() }));
+const dataSubs = []; let dataStarted = false;
+function startData(cb) { dataSubs.push(cb); if (dataStarted) return; dataStarted = true; _start(k => dataSubs.forEach(f => f(k))); }
+function _start(cb) {
+  const L = (k, fn = arr) => onSnapshot(collection(db, k), s => { S[k] = fn(s); cb(k); }, e => console.warn(k, e.message));
+  L("teams", s => arr(s).sort((a, b) => ts(a) - ts(b)));
+  L("players", s => arr(s).sort((a, b) => ts(b) - ts(a)));
+  L("matches", s => arr(s).sort((a, b) => (a.seq ?? ts(a)) - (b.seq ?? ts(b))));
+  L("balls");
+  L("grounds"); L("coaches");
+  L("polls", s => arr(s).sort((a, b) => ts(b) - ts(a)));
+  L("media", s => arr(s).sort((a, b) => ts(b) - ts(a)));
+  L("sponsors", s => arr(s).sort((a, b) => ts(a) - ts(b)));
+  L("news", s => arr(s).sort((a, b) => ts(b) - ts(a)));
+  onSnapshot(doc(db, "settings", "main"), s => { S.settings = s.exists() ? s.data() : {}; cb("settings"); }, e => console.warn(e.message));
+  onSnapshot(doc(db, "auctions", "live"), s => { S.live = s.exists() ? s.data() : null; cb("live"); }, e => console.warn(e.message));
+}
+function startAdminData(cb) {
+  const L = (k, fn = arr) => onSnapshot(collection(db, k), s => { S[k] = fn(s); cb(k); }, e => console.warn(k, e.message));
+  onSnapshot(collection(db, "private_players"), s => { S.priv = Object.fromEntries(s.docs.map(d => [d.id, d.data()])); cb("priv"); }, e => console.warn(e.message));
+  L("owners");
+}
+function cfg() {
+  const s = S.settings, n = (k, d) => (+s[k] > 0 ? +s[k] : d);
+  return {
+    entryFee: n("entryFee", 200), upiId: s.upiId || "", upiName: s.upiName || "Mini JPL", adminWa: s.adminWa || DEFAULT_WA, qrImg: s.qrImg || "",
+    startDate: s.startDate || "", purse: n("purse", 10000), basePrice: n("basePrice", 500), bidStep: n("bidStep", 100),
+    squadSize: n("squadSize", 8), overs: n("overs", 6), wicketsLimit: n("wicketsLimit", 10)
+  };
+}
+const approved = () => S.players.filter(p => p.payStatus === "paid" || p.payStatus === "approved");
+const teamOf = id => S.teams.find(t => t.id === id);
+const teamName = id => teamOf(id)?.name || "";
+const logo = (t, size = 36) => t?.logo ? `<img class="lg" style="width:${size}px;height:${size}px" src="${t.logo}" alt="">` : `<span class="lg ph" style="width:${size}px;height:${size}px;font-size:${size * .55}px">🏏</span>`;
+function teamLabel(m, side) {
+  const id = m[side + "TeamId"];
+  if (id) return teamName(id) || m[side + "Name"] || "";
+  return tr("तय होना बाकी", "TBD") + (m[side + "Label"] ? ` (${m[side + "Label"]})` : "");
+}
+const pollQ = p => tr(p.qHi || p.question || "", p.qEn || p.question || "");
+
+// ---------- cricket engine ----------
+function innings(matchId) {
+  const o = {};
+  S.balls.filter(b => b.matchId === matchId).forEach(b => {
+    const i = o[b.inn || 1] ||= { teamId: b.batTeamId, runs: 0, wkts: 0, legal: 0 };
+    i.runs += (b.runs || 0) + (b.extraRuns || 0);
+    if (b.wicket) i.wkts++;
+    if (!b.extra) i.legal++;
+  });
+  return o;
+}
+const scoreStr = i => i ? `${i.runs}/${i.wkts} (${oversOf(i.legal)})` : "";
+const scoreLine = m => [1, 2].map(k => innings(m.id)[k]).filter(Boolean).map(i => `${teamName(i.teamId)} ${i.runs}/${i.wkts} (${oversOf(i.legal)})`).join(" | ");
+const matchLimits = m => { const c = cfg(); return { mb: (+m.overs || c.overs) * 6, wl: +m.wkts || c.wicketsLimit }; };
+const firstBatOf = m => m.firstBatId || m.aTeamId;
+const batFor = (m, k) => k === 1 ? firstBatOf(m) : (firstBatOf(m) === m.aTeamId ? m.bTeamId : m.aTeamId);
+function liveInfo(m) {
+  const inn = innings(m.id), { mb, wl } = matchLimits(m), i1 = inn[1] || null, i2 = inn[2] || null;
+  const c1 = !!i1 && (i1.legal >= mb || i1.wkts >= wl);            // पहली पारी पूरी (ओवर या विकेट)
+  const target = c1 ? i1.runs + 1 : null;                           // लक्ष्य = पहली पारी के रन + 1
+  const cur = c1 ? 2 : 1, i = cur === 2 ? i2 : i1;
+  const c2 = !!i2 && (i2.legal >= mb || i2.wkts >= wl || i2.runs >= target);
+  const crr = i && i.legal ? i.runs / (i.legal / 6) : 0;
+  let rrr = null, need = null, left = null;
+  if (cur === 2 && target && i) { need = target - i.runs; left = mb - i.legal; rrr = left > 0 ? Math.max(need, 0) / (left / 6) : null; }
+  return { inn, cur, i, target, crr, rrr, need, left, maxBalls: mb, wl, c1, complete: cur === 2 && c2, done: c1 && c2 };
+}
+function computeResult(m) {
+  const { wl } = matchLimits(m), inn = innings(m.id), i1 = inn[1], i2 = inn[2];
+  if (!i1 || !i2) return null;
+  if (i2.runs > i1.runs) return { winnerId: i2.teamId, res: { type: "wkts", n: Math.max(wl - i2.wkts, 0) } };
+  if (i2.runs === i1.runs) return { winnerId: "", res: { type: "tie" } };
+  return { winnerId: i1.teamId, res: { type: "runs", n: i1.runs - i2.runs } };
+}
+function resultText(m) {
+  if (m.res) {
+    const w = teamName(m.winnerId);
+    if (m.res.type === "draw") return tr("मैच ड्रॉ", "Match drawn") + (m.res.reason === "auto" ? tr(" (समय पर स्कोर अपडेट नहीं हुआ)", " (no score update in time)") : m.res.reason ? ` (${m.res.reason})` : "");
+    if (m.res.type === "tie") return tr("मैच टाई", "Match tied");
+    if (m.res.type === "wkts") return tr(`${w} ${m.res.n} विकेट से जीता`, `${w} won by ${m.res.n} wickets`);
+    return tr(`${w} ${m.res.n} रन से जीता`, `${w} won by ${m.res.n} runs`);
+  }
+  return m.result || "";
+}
+const mballs = b => { const o = Math.floor(b || 0); return o * 6 + Math.round(((b || 0) - o) * 10); };
+const EMPTY_S = () => ({ runs: 0, balls: 0, fours: 0, sixes: 0, wkts: 0, legal: 0, runsGiven: 0, foursGiven: 0, sixesGiven: 0, catches: 0, stumpings: 0, runouts: 0, mids: new Set(), legacyMatches: 0 });
+function statsMap() {
+  const M = {}, g = id => M[id] ||= EMPTY_S();
+  S.players.forEach(p => { const s = g(p.id); s.runs += p.runs || 0; s.balls += p.balls || 0; s.wkts += p.wkts || 0; s.legal += mballs(p.overs); s.runsGiven += p.runsGiven || 0; s.legacyMatches = p.matches || 0; });
+  S.balls.forEach(b => {
+    if (b.batterId) { const s = g(b.batterId); s.mids.add(b.matchId); if (b.extra !== "wd") s.runs += b.runs || 0; if (!b.extra) s.balls++; if (b.extra !== "wd" && b.runs === 4) s.fours++; if (b.extra !== "wd" && b.runs === 6) s.sixes++; }
+    if (b.bowlerId) { const s = g(b.bowlerId); s.mids.add(b.matchId); s.runsGiven += (b.runs || 0) + (b.extraRuns || 0); if (!b.extra) s.legal++; if (b.runs === 4) s.foursGiven++; if (b.runs === 6) s.sixesGiven++; if (b.wicket && b.dismissal !== "runout") s.wkts++; }
+    if (b.wicket && b.fielderId) { const s = g(b.fielderId); s.mids.add(b.matchId); if (b.dismissal === "caught") s.catches++; else if (b.dismissal === "stumped") s.stumpings++; else if (b.dismissal === "runout") s.runouts++; }
+  });
+  S.matches.forEach(m => { if (m.status === "upcoming") return; [...(m.xiA || []), ...(m.xiB || [])].forEach(id => g(id).mids.add(m.id)); });
+  return M;
+}
+const fmtBat = s => ({ runs: s.runs, balls: s.balls, fours: s.fours, sixes: s.sixes, sr: s.balls ? (s.runs / s.balls * 100).toFixed(1) : "—" });
+const fmtBowl = s => ({ legal: s.legal, runs: s.runsGiven, wkts: s.wkts, overs: oversOf(s.legal), eco: s.legal ? (s.runsGiven / (s.legal / 6)).toFixed(2) : "—", foursGiven: s.foursGiven, sixesGiven: s.sixesGiven });
+const batStats = id => fmtBat(statsMap()[id] || EMPTY_S());
+const bowlStats = id => fmtBowl(statsMap()[id] || EMPTY_S());
+const ptsOf = s => s.runs + s.wkts * 25 + (s.catches + s.stumpings + s.runouts) * 10 + s.fours + s.sixes * 2;
+const matchesOf = s => Math.max(s.mids.size, s.legacyMatches);
+function playerRows() { const M = statsMap(); return S.players.map(p => { const s = M[p.id] || EMPTY_S(); return { p, s, b: fmtBat(s), w: fmtBowl(s), pts: ptsOf(s), mat: matchesOf(s) }; }); }
+function leaders() {
+  const rows = playerRows();
+  const top = f => rows.filter(r => f(r) > 0).sort((a, b) => f(b) - f(a)).slice(0, 5).map(r => ({ p: r.p, v: f(r), r }));
+  return { orange: top(r => r.s.runs), purple: top(r => r.s.wkts), sixes: top(r => r.s.sixes), mvp: top(r => r.pts) };
+}
+function standings() {
+  const T = {};
+  S.teams.forEach(t => T[t.id] = { t, P: 0, W: 0, L: 0, T: 0, pts: 0, rf: 0, of: 0, ra: 0, ob: 0 });
+  S.matches.filter(m => (m.status === "done" || m.status === "draw") && (m.stage || "league") === "league").forEach(m => {
+    const a = T[m.aTeamId], b = T[m.bTeamId]; if (!a || !b) return;
+    const { mb, wl } = matchLimits(m), inn = innings(m.id);
+    [1, 2].forEach(k => {
+      const i = inn[k]; if (!i) return; const bt = T[i.teamId]; if (!bt) return;
+      const other = bt === a ? b : a, ov = (i.wkts >= wl ? mb : i.legal) / 6;
+      bt.rf += i.runs; bt.of += ov; other.ra += i.runs; other.ob += ov;
+    });
+    a.P++; b.P++;
+    if (m.status === "draw" || m.res?.type === "tie") { a.T++; b.T++; a.pts++; b.pts++; }
+    else if (m.winnerId) { const w = T[m.winnerId], l = w === a ? b : a; if (w) { w.W++; w.pts += 2; } if (l) l.L++; }
+  });
+  return Object.values(T).map(r => ({ ...r, nrr: (r.of > 0 ? r.rf / r.of : 0) - (r.ob > 0 ? r.ra / r.ob : 0) })).sort((x, y) => y.pts - x.pts || y.nrr - x.nrr);
+}
+const tossText = m => m.toss ? tr(`टॉस: ${teamName(m.toss.winnerId)} ने ${m.toss.decision === "bat" ? "बैटिंग" : "बॉलिंग"} चुनी`, `Toss: ${teamName(m.toss.winnerId)} chose to ${m.toss.decision === "bat" ? "bat" : "bowl"}`) : "";
+function scorecardHTML(m) {
+  const inn = innings(m.id), { mb } = matchLimits(m), nm = id => S.players.find(p => p.id === id)?.name || "—";
+  let h = `<div class="center"><h3 style="margin:0 0 4px">${esc(teamLabel(m, "a"))} vs ${esc(teamLabel(m, "b"))}</h3><div style="color:var(--mut)">${stageLabel(m.stage)} • ${esc(m.groundName || "")} • ${esc(fmtWhen(m))}</div>
+  ${tossText(m) ? `<div style="color:var(--mut);font-size:14px;margin-top:4px">${esc(tossText(m))}</div>` : ""}
+  ${resultText(m) ? `<div class="msg" style="color:var(--gold);font-weight:700">🏆 ${esc(resultText(m))}</div>` : ""}</div>`;
+  [1, 2].forEach(k => {
+    const i = inn[k]; if (!i) return;
+    const bt = i.teamId, balls = S.balls.filter(b => b.matchId === m.id && (b.inn || 1) === k).sort((a, b) => (a.t || 0) - (b.t || 0));
+    const order = []; balls.forEach(b => { if (b.batterId && !order.includes(b.batterId)) order.push(b.batterId); });
+    (bt === m.aTeamId ? m.xiA || [] : m.xiB || []).forEach(id => { if (!order.includes(id)) order.push(id); });
+    const dText = f => { const bn = nm(f.bowlerId), fn = f.fielderId ? nm(f.fielderId) : "—";
+      switch (f.dismissal) { case "caught": return `c ${fn} b ${bn}`; case "stumped": return `st ${fn} b ${bn}`; case "runout": return `run out (${fn})`; case "lbw": return `lbw b ${bn}`; case "hitwicket": return `hit wkt b ${bn}`; default: return `b ${bn}`; } };
+    const bRows = order.map(id => {
+      const bb = balls.filter(b => b.batterId === id), runs = bb.reduce((s, b) => s + (b.extra === "wd" ? 0 : (b.runs || 0)), 0), faced = bb.filter(b => !b.extra).length;
+      const f = bb.find(b => b.wicket), fours = bb.filter(b => b.extra !== "wd" && b.runs === 4).length, sixes = bb.filter(b => b.extra !== "wd" && b.runs === 6).length;
+      const how = f ? dText(f) : bb.length ? tr("नॉट आउट", "not out") : tr("बल्लेबाजी नहीं की", "Did not bat");
+      return `<tr><td>${esc(nm(id))}<br><small style="color:var(--mut)">${esc(how)}</small></td><td><b>${runs}</b></td><td>${faced}</td><td>${fours}</td><td>${sixes}</td><td>${faced ? (runs / faced * 100).toFixed(1) : "—"}</td></tr>`;
+    }).join("");
+    const bowlers = []; balls.forEach(b => { if (b.bowlerId && !bowlers.includes(b.bowlerId)) bowlers.push(b.bowlerId); });
+    const wRows = bowlers.map(id => {
+      const bb = balls.filter(b => b.bowlerId === id), legal = bb.filter(b => !b.extra).length, runs = bb.reduce((s, b) => s + (b.runs || 0) + (b.extraRuns || 0), 0), wk = bb.filter(b => b.wicket && b.dismissal !== "runout").length;
+      return `<tr><td>${esc(nm(id))}</td><td>${oversOf(legal)}</td><td>${runs}</td><td><b>${wk}</b></td><td>${legal ? (runs / (legal / 6)).toFixed(2) : "—"}</td></tr>`;
+    }).join("");
+    h += `<div class="card" style="margin:10px 0;padding:12px"><h4 style="margin:0 0 6px">${esc(teamName(bt))}: <span class="score" style="font-size:24px">${i.runs}/${i.wkts}</span> <small>(${oversOf(i.legal)}/${Math.floor(mb / 6)} ${tr("ओवर", "ov")}) • ${tr("अतिरिक्त", "Extras")} ${balls.reduce((s, b) => s + (b.extraRuns || 0), 0)}</small></h4>
+    <div class="tw"><table><tr><th>${tr("बल्लेबाज", "Batter")}</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr>${bRows}</table></div>
+    <div class="tw" style="margin-top:8px"><table><tr><th>${tr("गेंदबाज", "Bowler")}</th><th>O</th><th>R</th><th>W</th><th>Eco</th></tr>${wRows}</table></div></div>`;
+  });
+  return h || `<div class="msg">${tr("अभी स्कोर नहीं है", "No score yet")}</div>`;
+}
+
+// ---------- commentary ----------
+const CM = {
+  "0": [["डॉट बॉल! कोई रन नहीं।", "Dot ball! No run."], ["बढ़िया गेंद, बल्लेबाज़ चूक गया।", "Beaten outside off, great delivery."], ["सीधे फील्डर के पास।", "Straight to the fielder."]],
+  "1": [["1 रन! सिंगल लेकर स्ट्राइक बदली।", "1 run! Quick single, strike rotated."], ["हल्का धक्का और एक रन।", "Nudged away for a single."], ["गैप में खेलकर एक रन।", "Worked into the gap for one."]],
+  "2": [["2 रन! दौड़कर दो रन बटोरे।", "2 runs! Hustled back for the second."], ["गैप में खेला, आराम से दो रन।", "Placed in the gap, comfortable two."], ["अच्छी दौड़, दो रन।", "Good running, two taken."]],
+  "3": [["3 रन! फील्डर ने बाउंड्री से रोका।", "3 runs! Saved at the rope."], ["लंबा शॉट, तीन रन दौड़े।", "Deep shot, three completed."], ["तीन रन! शानदार दौड़।", "Three! Superb running."]],
+  "4": [["4 रन! कवर्स के बीच से शानदार चौका!", "4 RUNS! Smashed through the covers!"], ["चौका! गेंद सीमा रेखा के पार!", "FOUR! Races away to the boundary!"], ["4 रन! क्या टाइमिंग है!", "4 RUNS! Pure timing!"]],
+  "6": [["छक्का! गेंद स्टेडियम के बाहर!", "SIX! That's out of the park!"], ["छक्का! सीधे दर्शकों में!", "SIX! Into the crowd!"], ["6 रन! क्या ज़बरदस्त हिट!", "SIX! What a monstrous hit!"]],
+  "wd": [["वाइड बॉल! एक अतिरिक्त रन।", "Wide ball! One extra."], ["लाइन से बाहर, वाइड।", "Too wide, extra run."], ["वाइड! दोबारा डालनी होगी।", "Wide! Has to bowl it again."]],
+  "nb": [["नो बॉल! फ्री हिट का मौका।", "No ball! Free runs on offer."], ["नो बॉल, एक अतिरिक्त रन।", "No ball, one extra."], ["नो बॉल! ओवरस्टेप।", "No ball! Overstepped."]],
+  "W": [["विकेट! गेंदबाज़ को सफलता मिली।", "The bowler strikes!"], ["विकेट गिरा! बल्लेबाज़ पवेलियन लौटा।", "Gone! Walks back to the pavilion."], ["क्या गेंद थी! विकेट!", "What a delivery! Wicket!"]]
+};
+function commentary(b) {
+  const k = b.wicket ? "W" : b.extra ? b.extra : String(b.runs || 0);
+  const v = (CM[k] || CM["0"])[(b.cmi || 0) % 3];
+  return (b.wicket ? tr(`आउट! (${dismissalLabel(b.dismissal)}) `, `OUT! (${dismissalLabel(b.dismissal)}) `) : "") + tr(v[0], v[1]) + (b.note ? ` — ${b.note}` : "");
+}
+const randomCmi = () => Math.floor(Math.random() * 3);
+function chip(b) {
+  if (b.wicket) return { t: "W", c: "w" };
+  if (b.extra === "wd") return { t: "Wd", c: "x" };
+  if (b.extra === "nb") return { t: "Nb", c: "x" };
+  return { t: String(b.runs || 0), c: b.runs === 4 ? "r4" : b.runs === 6 ? "r6" : "" };
+}
+const chipsHTML = list => list.map(b => { const c = chip(b); return `<span class="chip ${c.c}">${c.t}</span>`; }).join("");
+
+// ---------- sponsors marquee ----------
+function sponsorsHTML() {
+  if (!S.sponsors.length) return "";
+  const ord = { title: 0, co: 1 };
+  const list = [...S.sponsors].sort((a, b) => (ord[a.tier] ?? 2) - (ord[b.tier] ?? 2));
+  const one = s => `<span class="spn ${s.tier === "title" ? "ttl" : ""}"><img src="${s.logo}" alt=""><small>${esc(s.name)}</small>${s.tier === "title" ? `<em>${tr("टाइटल स्पॉन्सर", "Title Sponsor")}</em>` : ""}</span>`;
+  const base = list.map(one).join(""), h = base.repeat(list.length < 4 ? 4 : 1);
+  return `<div class="mq sp"><div>${h}${h}</div></div>`;
+}
+const marquee = (items, cls = "") => { const h = items.map(i => `<span>${i}</span>`).join("").repeat(3); return `<div class="mq ${cls}"><div>${h}${h}</div></div>`; };
+
+// ---------- sound & confetti ----------
+let actx = null;
+function enableSound() { try { actx ||= new (window.AudioContext || window.webkitAudioContext)(); actx.resume(); return true; } catch (e) { return false; } }
+function gavel() {
+  if (!actx) return; const t = actx.currentTime;
+  [0, 0.22, 0.5].forEach(d => {
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = "triangle"; o.frequency.setValueAtTime(220, t + d); o.frequency.exponentialRampToValueAtTime(45, t + d + 0.14);
+    g.gain.setValueAtTime(1, t + d); g.gain.exponentialRampToValueAtTime(0.001, t + d + 0.28);
+    o.connect(g); g.connect(actx.destination); o.start(t + d); o.stop(t + d + 0.3);
+  });
+}
+function confetti(ms = 4000) {
+  const c = document.createElement("canvas"); c.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:99";
+  c.width = innerWidth; c.height = innerHeight; document.body.appendChild(c);
+  const x = c.getContext("2d"), cols = ["#f5b700", "#ef4444", "#22c55e", "#3b82f6", "#a855f7", "#ffffff"];
+  const P = Array.from({ length: 170 }, () => ({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * .6, w: 6 + Math.random() * 8, h: 8 + Math.random() * 10, vy: 2 + Math.random() * 4, vx: -2 + Math.random() * 4, r: Math.random() * 6, vr: Math.random() * .3 - .15, c: cols[Math.random() * cols.length | 0] }));
+  const t0 = performance.now();
+  (function f(t) { x.clearRect(0, 0, c.width, c.height); P.forEach(p => { p.x += p.vx; p.y += p.vy; p.r += p.vr; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); x.restore(); }); if (t - t0 < ms) requestAnimationFrame(f); else c.remove(); })(t0);
+}
+
+// ---------- canvas: player card ----------
+async function drawPlayerCard(cv, p, url) {
+  cv.width = 900; cv.height = 1400; const x = cv.getContext("2d");
+  let g = x.createLinearGradient(0, 0, 900, 1400); g.addColorStop(0, "#0a1a3a"); g.addColorStop(.6, "#10285a"); g.addColorStop(1, "#050d22");
+  x.fillStyle = g; x.fillRect(0, 0, 900, 1400);
+  const gold = x.createLinearGradient(0, 0, 900, 0); gold.addColorStop(0, "#b8860b"); gold.addColorStop(.5, "#ffd95a"); gold.addColorStop(1, "#b8860b");
+  x.strokeStyle = gold; x.lineWidth = 14; x.strokeRect(20, 20, 860, 1360); x.lineWidth = 3; x.strokeRect(46, 46, 808, 1308);
+  x.textAlign = "center"; x.fillStyle = gold; x.font = "bold 96px sans-serif"; x.fillText("MINI JPL", 450, 160);
+  x.fillStyle = "#fff"; x.font = "30px sans-serif"; x.fillText("PLAYER ID CARD", 450, 208);
+  const img = await loadImg(p.photo);
+  x.save(); x.beginPath(); x.arc(450, 470, 215, 0, Math.PI * 2); x.clip();
+  if (img) { const s = Math.max(430 / img.width, 430 / img.height); x.drawImage(img, 450 - img.width * s / 2, 470 - img.height * s / 2, img.width * s, img.height * s); }
+  x.restore(); x.strokeStyle = gold; x.lineWidth = 10; x.beginPath(); x.arc(450, 470, 215, 0, Math.PI * 2); x.stroke();
+  let fs = 66; x.fillStyle = "#fff"; x.font = `bold ${fs}px sans-serif`;
+  while (x.measureText(p.name).width > 760 && fs > 30) { fs -= 2; x.font = `bold ${fs}px sans-serif`; }
+  x.fillText(p.name, 450, 790);
+  const role = roleLabel(p.role); x.font = "bold 36px sans-serif"; const rw = x.measureText(role).width + 70;
+  x.fillStyle = gold; x.beginPath(); x.roundRect(450 - rw / 2, 820, rw, 62, 31); x.fill();
+  x.fillStyle = "#0a1a3a"; x.fillText(role, 450, 865);
+  x.fillStyle = "#cfe0ff"; x.font = "34px sans-serif";
+  x.fillText(`📍 ${p.village || "—"}`, 450, 940);
+  if (p.teamName) x.fillText(`🏏 ${p.teamName}`, 450, 985);
+  x.fillStyle = gold; x.font = "bold 46px sans-serif"; x.fillText(`ID: ${pidOf(p.id)}`, 450, 1050);
+  x.fillStyle = "#fff"; x.fillRect(320, 1075, 260, 260);
+  try { const tmp = document.createElement("div"); new QRCode(tmp, { text: url, width: 240, height: 240 }); const qc = tmp.querySelector("canvas"); if (qc) x.drawImage(qc, 330, 1085, 240, 240); } catch (e) { }
+  x.fillStyle = "#9fb0cc"; x.font = "24px sans-serif"; x.fillText(tr("जोताई, पोरसा, मुरैना (म.प्र.)", "Jotai, Porsa, Morena (M.P.)"), 450, 1362);
+}
+
+// ---------- canvas: match poster ----------
+async function drawMatchPoster(cv, m) {
+  cv.width = cv.height = 1080; const x = cv.getContext("2d");
+  const g = x.createLinearGradient(0, 0, 1080, 1080); g.addColorStop(0, "#0b1d3a"); g.addColorStop(1, "#4c1d95"); x.fillStyle = g; x.fillRect(0, 0, 1080, 1080);
+  x.strokeStyle = "#f5b700"; x.lineWidth = 10; x.strokeRect(24, 24, 1032, 1032);
+  x.textAlign = "center"; x.fillStyle = "#f5b700"; x.font = "bold 80px sans-serif"; x.fillText("MINI JPL", 540, 125);
+  const done = m.status === "done" || !!m.res, inn = innings(m.id);
+  x.fillStyle = "#fff"; x.font = "bold 46px sans-serif";
+  x.fillText((done ? tr("मैच रिज़ल्ट", "MATCH RESULT") : tr("आज का मैच", "TODAY'S MATCH")) + (m.stage && m.stage !== "league" ? " • " + stageLabel(m.stage) : ""), 540, 195);
+  for (const [side, cx] of [["a", 250], ["b", 830]]) {
+    const t = teamOf(m[side + "TeamId"]), im = await loadImg(t?.logo);
+    x.save(); x.beginPath(); x.arc(cx, 420, 130, 0, Math.PI * 2); x.clip(); x.fillStyle = "#13294f"; x.fillRect(cx - 130, 290, 260, 260);
+    if (im) { const s = Math.max(260 / im.width, 260 / im.height); x.drawImage(im, cx - im.width * s / 2, 420 - im.height * s / 2, im.width * s, im.height * s); }
+    else { x.fillStyle = "#f5b700"; x.font = "bold 110px sans-serif"; x.fillText((teamLabel(m, side)[0] || "?"), cx, 460); }
+    x.restore(); x.strokeStyle = "#f5b700"; x.lineWidth = 8; x.beginPath(); x.arc(cx, 420, 130, 0, Math.PI * 2); x.stroke();
+    let fs = 46; x.fillStyle = "#fff"; x.font = `bold ${fs}px sans-serif`; const nm = teamLabel(m, side);
+    while (x.measureText(nm).width > 440 && fs > 24) { fs -= 2; x.font = `bold ${fs}px sans-serif`; }
+    x.fillText(nm, cx, 620);
+    const i = Object.values(inn).find(v => v.teamId === m[side + "TeamId"]);
+    if (i) { x.fillStyle = "#f5b700"; x.font = "bold 52px sans-serif"; x.fillText(`${i.runs}/${i.wkts}`, cx, 690); }
+  }
+  x.fillStyle = "#f5b700"; x.font = "bold 90px sans-serif"; x.fillText("VS", 540, 450);
+  x.fillStyle = "#fff"; x.font = "36px sans-serif";
+  if (done && resultText(m)) { x.fillStyle = "#f5b700"; x.font = "bold 44px sans-serif"; x.fillText(resultText(m), 540, 780); }
+  else x.fillText(`📍 ${m.groundName || "—"}   ⏰ ${fmtWhen(m) || "—"}`, 540, 780);
+  const sp = S.sponsors.slice(0, 6);
+  if (sp.length) {
+    x.fillStyle = "#9fb0cc"; x.font = "26px sans-serif"; x.fillText(tr("हमारे प्रायोजक", "OUR SPONSORS"), 540, 850);
+    const ims = await Promise.all(sp.map(s => loadImg(s.logo))); const slot = 960 / sp.length;
+    ims.forEach((im, k) => { if (!im) return; const s = Math.min((slot - 20) / im.width, 120 / im.height), w = im.width * s, h = im.height * s; x.fillStyle = "#fff"; x.fillRect(60 + slot * k + slot / 2 - w / 2 - 6, 900 + 60 - h / 2 - 6, w + 12, h + 12); x.drawImage(im, 60 + slot * k + slot / 2 - w / 2, 960 - h / 2, w, h); });
+  }
+  x.fillStyle = "#9fb0cc"; x.font = "26px sans-serif"; x.fillText(tr("जोताई, पोरसा, मुरैना (म.प्र.)", "Jotai, Porsa, Morena (M.P.)"), 540, 1030);
+}
+
+{ // ===== PUBLIC SITE =====
+
+
+let me = null, myTeamId = null, cardPlayer = null;
+const roleKeyFix = r => r;
+
+// ---------- tabs / language ----------
+document.querySelectorAll("#pubRoot nav [data-tab]").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#pubRoot nav [data-tab]").forEach(x => x.classList.remove("on"));
+  document.querySelectorAll("#pubRoot section").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); $(b.dataset.tab).classList.add("on"); window.scrollTo(0, 0);
+});
+document.querySelectorAll(".langBtn").forEach(b => b.onclick = toggleLang);
+onLang(renderAll);
+
+// ---------- render ----------
+let raf = 0;
+startData(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(renderAll); });
+function renderAll() {
+  renderHdr(); renderTicker(); renderHome(); renderPay(); renderPlayers(); renderTeams(); renderLive(); renderAuction();
+  renderMyTeam(); renderGallery(); renderFan(); renderPosterSel(); renderSched(); renderPoints(); renderCoaches(); applyLang();
+}
+const isLiveM = m => m.status === "live";
+function renderHdr() {
+  const c = cfg();
+  $("startBar").textContent = c.startDate ? tr(`🏁 टूर्नामेंट शुरू: ${fmtDate(c.startDate)}`, `🏁 Tournament starts: ${fmtDate(c.startDate)}`) : "";
+  $("authBtn").textContent = me ? tr(`बाहर निकलें (${me.email})`, `Sign out (${me.email})`) : tr("🔵 टीम मालिक लॉगिन", "🔵 Team Owner Login");
+}
+function renderTicker() {
+  const it = []; const c = cfg();
+  S.news.forEach(n => it.push("📰 " + esc(n.text)));
+  S.matches.filter(isLiveM).forEach(m => { const li = liveInfo(m); it.push(`🔴 LIVE: ${esc(teamLabel(m, "a"))} vs ${esc(teamLabel(m, "b"))} — ${Object.values(li.inn).map(i => esc(teamName(i.teamId)) + " " + scoreStr(i)).join(" | ")}`); });
+  const done = S.matches.filter(m => m.status === "done" || m.status === "draw").pop(); if (done && resultText(done)) it.push("🏆 " + esc(resultText(done)));
+  if (c.startDate) it.push(tr(`🏁 टूर्नामेंट शुरू: ${fmtDate(c.startDate)}`, `🏁 Tournament starts: ${fmtDate(c.startDate)}`));
+  if (S.settings.auctionOn) it.push(tr("🔨 लाइव ऑक्शन चालू है!", "🔨 Live Auction is ON!"));
+  if (!it.length) it.push(tr("मिनी JPL में आपका स्वागत है! 🏏", "Welcome to Mini JPL! 🏏"));
+  $("topTicker").innerHTML = marquee(it, "tick");
+}
+function matchBlock(m) {
+  const li = liveInfo(m);
+  return `<div class="center" data-sc="${m.id}" style="cursor:pointer"><div style="font-size:20px;font-weight:700">${esc(teamLabel(m, "a"))} <span style="color:var(--gold)">vs</span> ${esc(teamLabel(m, "b"))}</div>
+  <div style="color:var(--mut)">${stageLabel(m.stage)} • ${esc(m.groundName || "")} • ${esc(fmtWhen(m))}</div>
+  ${isLiveM(m) ? `<span class="tag livebadge">LIVE</span>` : ""}${Object.values(li.inn).map(i => `<div class="score">${esc(teamName(i.teamId))} ${scoreStr(i)}</div>`).join("")}
+  ${tossText(m) ? `<div style="color:var(--mut);font-size:13px">${esc(tossText(m))}</div>` : ""}
+  ${resultText(m) ? `<div style="color:var(--gold);font-weight:700">${esc(resultText(m))}</div>` : ""}<div style="color:var(--mut);font-size:12px">${tr("स्कोरकार्ड के लिए टैप करें", "Tap for scorecard")}</div></div>`;
+}
+
+function renderHome() {
+  const c = cfg(); let h = "";
+  if (c.startDate) { const d = Math.ceil((new Date(c.startDate + "T00:00:00") - Date.now()) / 864e5); h = d > 0 ? tr(`शुरू होने में ${d} दिन बाकी`, `${d} days to go`) : ""; }
+  $("heroInfo").innerHTML = `<div style="color:var(--mut)">${tr("📍 जोताई, पोरसा, मुरैना", "📍 Jotai, Porsa, Morena")}</div><div style="font-size:22px;font-weight:700;margin-top:6px">${h}</div>`;
+  const m = S.matches.find(isLiveM) || S.matches.find(x => x.status !== "done" && x.status !== "draw") || S.matches[S.matches.length - 1];
+  $("homeMatch").innerHTML = m ? matchBlock(m) : `<div>${tr("अभी कोई मैच नहीं", "No matches yet")}</div>`;
+  $("homeSp").innerHTML = sponsorsHTML();
+  $("homeStats").innerHTML = `<div><b>${S.teams.length}</b><small>${tr("टीमें", "Teams")}</small></div><div><b>${approved().length}</b><small>${tr("खिलाड़ी", "Players")}</small></div><div><b>${S.matches.length}</b><small>${tr("मैच", "Matches")}</small></div>`;
+}
+
+// ---------- registration ----------
+let payKey = "";
+function renderPay() {
+  const c = cfg(), key = c.entryFee + "|" + c.upiId + "|" + c.qrImg + "|" + c.upiName;
+  if (key === payKey && $("payBox").innerHTML) { $("payFee") && ($("payFee").textContent = rupee(c.entryFee)); return; }
+  payKey = key;
+  const url = `upi://pay?pa=${encodeURIComponent(c.upiId)}&pn=${encodeURIComponent(c.upiName)}&am=${c.entryFee}&cu=INR&tn=JPL%20Entry`;
+  $("payBox").innerHTML = `<h3 style="margin:0">${tr("एंट्री फीस", "Entry Fee")}: <span id="payFee">${rupee(c.entryFee)}</span></h3>
+    <div id="qrHolder" style="display:inline-block;background:#fff;padding:10px;border-radius:8px;margin:8px"></div>
+    <div style="color:var(--mut)">UPI ID: <b>${c.upiId ? esc(c.upiId) : tr("जल्द जोड़ी जाएगी – एडमिन से पूछें", "will be added soon – ask admin")}</b></div>
+    ${c.upiId ? `<a href="${url}" class="sm" style="display:inline-block;margin-top:6px">${tr("📲 UPI ऐप से भुगतान", "📲 Pay via UPI app")}</a>` : ""}`;
+  const h = $("qrHolder");
+  if (c.qrImg) h.innerHTML = `<img src="${c.qrImg}" style="width:200px;display:block">`;
+  else if (c.upiId) new QRCode(h, { text: url, width: 190, height: 190 });
+  else h.style.display = "none";
+}
+$("regForm").onsubmit = async e => {
+  e.preventDefault(); const btn = $("regBtn"); btn.disabled = true; btn.textContent = tr("सबमिट हो रहा है...", "Submitting...");
+  try {
+    const photo = await compress($("photo").files[0], 500, 0.85), shot = await compress($("shot").files[0], 900, 0.6);
+    const p = { name: $("name").value.trim(), age: +$("age").value, village: $("village").value.trim(), role: $("role").value, photo, teamId: "", teamName: "", payStatus: "pending", auctionStatus: "", matches: 0, runs: 0, balls: 0, wkts: 0, overs: 0, runsGiven: 0, createdAt: serverTimestamp(), t: Date.now() };
+    const ref = await addDoc(collection(db, "players"), p);
+    await setDoc(doc(db, "private_players", ref.id), { mobile: $("mobile").value, tshirt: $("tsize").value, fee: cfg().entryFee, shot, status: "pending" });
+    cardPlayer = { ...p, id: ref.id };
+    $("regCard").classList.add("hidden"); $("doneCard").classList.remove("hidden");
+    await drawPlayerCard($("cardCanvas"), cardPlayer, location.origin + location.pathname + "?p=" + ref.id);
+    $("waAdmin").href = `https://wa.me/${cfg().adminWa}?text=${encodeURIComponent(`नया JPL रजिस्ट्रेशन / New JPL registration\n${p.name} (${pidOf(ref.id)})\n${p.village}\n${$("mobile").value}`)}`;
+  } catch (err) { $("regMsg").innerHTML = `<div class="msg">❌ ${esc(err.message)}</div>`; btn.disabled = false; btn.textContent = tr("रजिस्टर करें", "Register"); }
+};
+$("dlCard").onclick = () => downloadCanvas($("cardCanvas"), pidOf(cardPlayer.id) + ".png");
+$("newReg").onclick = () => { $("regForm").reset(); $("regMsg").innerHTML = ""; $("regBtn").disabled = false; $("regBtn").textContent = tr("रजिस्टर करें", "Register"); $("doneCard").classList.add("hidden"); $("regCard").classList.remove("hidden"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+$("shCard").onclick = () => shareCanvas($("cardCanvas"), pidOf(cardPlayer.id) + ".png", tr(`मेरा मिनी JPL प्लेयर कार्ड – ${cardPlayer.name} (${pidOf(cardPlayer.id)})`, `My Mini JPL Player Card – ${cardPlayer.name} (${pidOf(cardPlayer.id)})`));
+
+// ---------- players ----------
+function renderPlayers() {
+  keepSel("fTeam", `<option value="">${tr("सभी टीमें", "All teams")}</option>` + S.teams.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join(""));
+  const tf = $("fTeam").value, rf = $("fRole").value;
+  const list = approved().filter(p => (!tf || p.teamId === tf) && (!rf || roleLabel(p.role) === roleLabel(rf)));
+  $("pGrid").innerHTML = list.length ? list.map(p => { const b = batStats(p.id), w = bowlStats(p.id); return `<div class="pc" data-open="${p.id}">
+    <img class="pp" src="${p.photo}" alt=""><div style="font-weight:700;margin-top:8px">${esc(p.name)}</div><span class="tag role">${roleLabel(p.role)}</span>
+    <div style="color:var(--mut);font-size:13px">${esc(p.village || "")}${p.teamName ? " • " + esc(p.teamName) : ""}</div>
+    <div style="font-size:13px">${tr("रन", "Runs")}: <b>${b.runs}</b> | ${tr("विकेट", "Wkts")}: <b>${w.wkts}</b></div></div>`; }).join("") : `<div class="card">${tr("कोई खिलाड़ी नहीं मिला", "No players found")}</div>`;
+}
+["fTeam", "fRole"].forEach(id => $(id).addEventListener("change", renderPlayers));
+$("pGrid").onclick = e => { const c = e.target.closest("[data-open]"); if (c) openProfile(c.dataset.open); };
+function openProfile(id) {
+  const p = S.players.find(x => x.id === id); if (!p) return;
+  const b = batStats(id), w = bowlStats(id), sx = statsMap()[id] || EMPTY_S();
+  $("pBody").innerHTML = `<div class="center"><img src="${p.photo}" style="width:140px;height:140px;border-radius:50%;object-fit:cover;border:4px solid var(--gold)">
+    <h2 style="margin:10px 0 4px">${esc(p.name)}</h2><span class="tag role">${roleLabel(p.role)}</span>
+    <div style="color:var(--mut);margin-top:6px">${esc(p.village || "")} • ${tr("टीम", "Team")}: ${esc(p.teamName || "—")} • ${pidOf(p.id)}</div></div>
+    <div class="stats"><div><b>${b.runs}</b><small>${tr("रन", "Runs")}</small></div><div><b>${b.balls}</b><small>${tr("गेंदें", "Balls")}</small></div><div><b>${b.sr}</b><small>${tr("स्ट्राइक रेट", "Strike Rate")}</small></div>
+    <div><b>${b.fours}</b><small>${tr("चौके", "Fours")}</small></div><div><b>${b.sixes}</b><small>${tr("छक्के", "Sixes")}</small></div><div><b>${w.wkts}</b><small>${tr("विकेट", "Wickets")}</small></div>
+    <div><b>${w.overs}</b><small>${tr("ओवर", "Overs")}</small></div><div><b>${w.eco}</b><small>${tr("इकॉनमी", "Economy")}</small></div><div><b>${rupee(p.soldPrice)}</b><small>${tr("बिका भाव", "Sold Price")}</small></div></div>
+    <div class="stats"><div><b>${matchesOf(sx)}</b><small>${tr("मैच", "Matches")}</small></div><div><b>${sx.catches + sx.stumpings + sx.runouts}</b><small>${tr("कैच/स्टंप/RO", "C/St/RO")}</small></div><div><b>${ptsOf(sx)}</b><small>${tr("पॉइंट्स", "Points")}</small></div></div>
+    <button class="pri" onclick="document.getElementById('pModal').classList.remove('on')">${tr("बंद करें", "Close")}</button>`;
+  $("pModal").classList.add("on");
+}
+$("pModal").onclick = e => { if (e.target === $("pModal")) $("pModal").classList.remove("on"); };
+const qp = new URLSearchParams(location.search).get("p");
+if (qp) { const t = setInterval(() => { if (S.players.length) { clearInterval(t); openProfile(qp); } }, 400); }
+
+// ---------- teams (view only) ----------
+function renderTeams() {
+  $("teamGrid").innerHTML = S.teams.length ? S.teams.map(t => { const sq = S.players.filter(p => p.teamId === t.id); return `<div class="card">
+    <div style="display:flex;gap:12px;align-items:center">${logo(t, 56)}<div><h3 style="margin:0">${esc(t.name)}</h3><small style="color:var(--mut)">${tr("कप्तान", "Captain")}: ${esc(t.captain || "—")} • ${tr("कोच", "Coach")}: ${esc(t.coach || "—")}</small></div></div>
+    <div style="margin-top:8px">${tr("मालिक", "Owner")}: <b>${esc(t.ownerName || "—")}</b></div>
+    <div>${tr("बचा पर्स", "Remaining Purse")}: <b style="color:var(--gold)">${rupee(t.purse)}</b> • ${tr("खिलाड़ी", "Players")}: <b>${sq.length}</b></div>
+    <div style="margin-top:6px;color:var(--mut);font-size:13px">${sq.map(p => esc(p.name)).join(", ") || "—"}</div></div>`; }).join("") : `<div class="card">${tr("अभी कोई टीम नहीं", "No teams yet")}</div>`;
+}
+function renderMyTeam() {
+  const t = teamOf(myTeamId);
+  if (!t) { $("myTeamBox").innerHTML = `<div>${tr("आप किसी टीम के मालिक नहीं हैं।", "You are not a team owner.")}</div>`; return; }
+  const sq = S.players.filter(p => p.teamId === t.id), spent = sq.reduce((s, p) => s + (p.soldPrice || 0), 0);
+  $("myTeamBox").innerHTML = `<h2>${logo(t, 44)} ${esc(t.name)}</h2><div class="stats"><div><b>${rupee(t.purse)}</b><small>${tr("बचा पर्स", "Remaining Purse")}</small></div><div><b>${rupee(spent)}</b><small>${tr("खर्च", "Spent")}</small></div><div><b>${sq.length}/${cfg().squadSize}</b><small>${tr("स्क्वाड", "Squad")}</small></div></div>
+    <div class="tw"><table><tr><th>${tr("नाम", "Name")}</th><th>${tr("रोल", "Role")}</th><th>${tr("भाव", "Price")}</th></tr>${sq.map(p => `<tr><td>${esc(p.name)}</td><td>${roleLabel(p.role)}</td><td>${rupee(p.soldPrice)}</td></tr>`).join("") || "<tr><td colspan=3>—</td></tr>"}</table></div>`;
+}
+
+// ---------- live score ----------
+function renderLive() {
+  const opts = S.matches.map(m => `<option value="${m.id}">${esc(teamLabel(m, "a"))} vs ${esc(teamLabel(m, "b"))} (${stageLabel(m.stage)})</option>`).join("");
+  const had = $("liveMatch").value; keepSel("liveMatch", opts);
+  if (!had) { const m = S.matches.find(isLiveM) || S.matches.filter(x => x.status === "done").pop() || S.matches[0]; if (m) $("liveMatch").value = m.id; }
+  const m = S.matches.find(x => x.id === $("liveMatch").value);
+  if (!m) { $("liveBoard").innerHTML = `<div>${tr("अभी कोई मैच नहीं", "No match yet")}</div>`; $("recent").innerHTML = ""; $("commentary").innerHTML = ""; return; }
+  const li = liveInfo(m), maxO = m.overs || cfg().overs;
+  $("liveBoard").innerHTML = `<h3 style="margin:0 0 6px">${esc(teamLabel(m, "a"))} vs ${esc(teamLabel(m, "b"))} ${isLiveM(m) ? '<span class="tag livebadge">LIVE</span>' : ""}</h3>
+    <div style="color:var(--mut)">${stageLabel(m.stage)} • ${esc(m.groundName || "")} • ${esc(fmtWhen(m))} • ${maxO} ${tr("ओवर", "overs")}</div>` +
+    ([1, 2].map(k => li.inn[k] ? `<div class="msg" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;align-items:center"><b>${esc(teamName(li.inn[k].teamId))}</b><span class="score">${li.inn[k].runs}/${li.inn[k].wkts}</span><span style="color:var(--mut)">${tr("ओवर", "Overs")} ${oversOf(li.inn[k].legal)} • CRR ${li.inn[k].legal ? (li.inn[k].runs / (li.inn[k].legal / 6)).toFixed(2) : "0.00"}</span></div>` : "").join("") || `<div class="msg">${tr("स्कोर शुरू नहीं हुआ", "Scoring not started")}</div>`) +
+    (li.cur === 2 && li.target && !m.res ? `<div class="msg">${tr("लक्ष्य", "Target")}: <b>${li.target}</b> • ${tr("चाहिए", "Need")} <b>${Math.max(li.need, 0)}</b> ${tr("रन", "runs")} / <b>${li.left}</b> ${tr("गेंद", "balls")} • RRR <b>${li.rrr != null ? li.rrr.toFixed(2) : "—"}</b></div>` : "") +
+    (resultText(m) ? `<div class="msg" style="color:var(--gold);font-weight:700">🏆 ${esc(resultText(m))}</div>` : "");
+  const bl = S.balls.filter(b => b.matchId === m.id).sort((a, b) => (a.t || 0) - (b.t || 0));
+  $("recent").innerHTML = bl.length ? chipsHTML(bl.slice(-12)) : "—";
+  $("commentary").innerHTML = bl.length ? bl.slice(-25).reverse().map(b => `<div class="msg"><b>${esc(S.players.find(p => p.id === b.batterId)?.name || "")}</b> — ${esc(commentary(b))} <small style="color:var(--mut)">(${esc(S.players.find(p => p.id === b.bowlerId)?.name || "")})</small></div>`).join("") : `<div>${tr("अभी कोई बॉल नहीं", "No balls yet")}</div>`;
+}
+$("liveMatch").addEventListener("change", renderLive);
+
+// ---------- auction arena ----------
+let aucKey = "";
+$("soundBtn").onclick = () => { enableSound(); $("soundBtn").textContent = "🔊 ON"; gavel(); };
+$("fsBtn").onclick = () => $("arena").requestFullscreen?.();
+function renderAuction() {
+  const on = !!S.settings.auctionOn, L = S.live, p = L?.playerId ? S.players.find(x => x.id === L.playerId) : null, c = cfg();
+  $("aucBadge").className = "tag " + (on ? "livebadge" : "rej");
+  $("aucBadge").textContent = on ? tr("🔴 ऑक्शन चालू", "🔴 AUCTION LIVE") : tr("⏸ ऑक्शन बंद", "⏸ AUCTION CLOSED");
+  const pool = approved().filter(x => !x.teamId && x.auctionStatus !== "unsold").length, uns = S.players.filter(x => x.auctionStatus === "unsold").length;
+  if (!on) $("aucStage").innerHTML = `<div class="nm">⏸ ${tr("नीलामी अभी बंद है", "Auction is currently closed")}</div><div class="lbl">${tr("चालू होने पर यहाँ लाइव दिखेगी", "It will appear here live once it starts")}</div>`;
+  else if (!p) $("aucStage").innerHTML = `<div class="nm">${tr("अगले खिलाड़ी का इंतज़ार…", "Waiting for next player…")}</div><div class="lbl">${tr("पूल में", "In pool")}: ${pool} • ${tr("अनबिके", "Unsold")}: ${uns}</div>`;
+  else { const bt = teamOf(L.bidTeamId);
+    $("aucStage").innerHTML = `<img class="photo" src="${p.photo}" alt=""><div class="nm">${esc(p.name)}</div>
+      <div class="lbl">${roleLabel(p.role)} • ${esc(p.village || "")} • ${tr("उम्र", "Age")} ${p.age}</div>
+      <div class="lbl">${tr("बेस प्राइस", "Base Price")}: <b style="color:#fff">${rupee(L.base)}</b></div>
+      <div class="lbl">${tr("वर्तमान बोली", "CURRENT BID")}</div><div class="bid">${rupee(L.bid)}</div>
+      <div style="font-size:26px;font-weight:800;display:flex;align-items:center;gap:10px">${bt ? logo(bt, 44) + " " + esc(bt.name) : tr("कोई बोली नहीं", "No bids yet")}</div>
+      <div class="lbl">${tr("पूल में", "In pool")}: ${pool} • ${tr("अनबिके", "Unsold")}: ${uns}</div>`; }
+  const st = on && p && (L.status === "sold" || L.status === "unsold") ? L.status : "";
+  $("stampBox").innerHTML = st ? (st === "sold" ? `<div class="stamp sold"><b>SOLD!</b><div class="tm">${logo(teamOf(L.bidTeamId), 70)} ${esc(teamName(L.bidTeamId))}</div><div class="pr">${rupee(L.bid)}</div></div>` : `<div class="stamp unsold"><b>UNSOLD</b></div>`) : "";
+  if (st) { const k = L.playerId + st + L.soldAt; if (k !== aucKey) { aucKey = k; if (Date.now() - (L.soldAt || 0) < 20000 && $("auction").classList.contains("on") && st === "sold") { gavel(); confetti(); } } }
+  $("aucTicker").innerHTML = S.teams.length ? marquee(S.teams.map(t => `${logo(t, 26)} <b>${esc(t.name)}</b> • ${tr("पर्स", "Purse")} ${rupee(t.purse)} • ${S.players.filter(x => x.teamId === t.id).length} ${tr("खिलाड़ी", "players")}`), "tick") : "";
+  $("aucSp").innerHTML = sponsorsHTML();
+}
+
+// ---------- gallery ----------
+const okMedia = m => m.status !== "pending" && m.status !== "rejected";
+function renderGallery() {
+  const l = S.media.filter(okMedia);
+  $("gGrid").innerHTML = l.length ? l.map(m => m.kind === "video" ? `<div class="pc"><a href="${esc(m.url)}" target="_blank" rel="noopener">🎬 ${tr("वीडियो देखें", "Watch video")}</a><div style="font-size:13px">${esc(m.caption)}</div></div>`
+    : `<div class="pc"><img src="${m.src}" style="width:100%;height:150px;border-radius:8px;object-fit:cover"><div style="font-size:13px">${esc(m.caption)}</div></div>`).join("") : `<div class="card">${tr("अभी कोई फोटो नहीं", "No photos yet")}</div>`;
+}
+$("gUp").onclick = async () => {
+  const f = $("gFile").files[0]; if (!f) { $("gMsg").innerHTML = `<div class="msg">${tr("फोटो चुनें", "Choose a photo")}</div>`; return; }
+  const src = await compress(f, 800, 0.6); if (src.length > 900000) { $("gMsg").innerHTML = `<div class="msg">${tr("फोटो बहुत बड़ी है", "Photo too large")}</div>`; return; }
+  await addDoc(collection(db, "media"), { kind: "photo", src, caption: $("gCap").value.trim(), status: "pending", createdAt: serverTimestamp(), t: Date.now() });
+  $("gMsg").innerHTML = `<div class="msg">✅ ${tr("एडमिन की मंज़ूरी के लिए भेज दी गई", "Sent for admin approval")}</div>`; $("gFile").value = ""; $("gCap").value = "";
+};
+$("gLinkAdd").onclick = async () => {
+  const url = $("gLink").value.trim(); if (!/^https?:\/\//.test(url)) return;
+  await addDoc(collection(db, "media"), { kind: "video", url, caption: $("gCap").value.trim(), status: "pending", createdAt: serverTimestamp(), t: Date.now() });
+  $("gLink").value = ""; $("gMsg").innerHTML = `<div class="msg">✅ ${tr("एडमिन की मंज़ूरी के लिए भेज दिया गया", "Sent for admin approval")}</div>`;
+};
+
+// ---------- fan zone ----------
+function renderFan() {
+  const open = S.polls.filter(p => p.open !== false).slice(0, 4);
+  const h = open.length ? open.map(p => {
+    const voted = localStorage.getItem("voted_" + p.id) !== null, total = (p.labels || []).reduce((s, _, i) => s + ((p.counts || {})[i] || 0), 0);
+    return `<div class="msg"><b>${esc(pollQ(p))}</b>${(p.labels || []).map((l, i) => { const n = (p.counts || {})[i] || 0, pc = total ? Math.round(n / total * 100) : 0;
+      return `<div style="margin-top:8px"><div style="display:flex;justify-content:space-between;gap:6px"><button class="sm" ${voted ? "disabled" : ""} data-vote="${p.id}|${i}">${esc(l)}</button><span>${pc}% <small style="color:var(--mut)">(${n})</small></span></div><div class="bar"><i style="width:${pc}%"></i></div></div>`; }).join("")}
+      ${voted ? `<small style="color:var(--mut)">${tr("आपका वोट दर्ज हो गया", "Your vote is recorded")}</small>` : ""}</div>`; }).join("") : `<div class="msg">${tr("अभी कोई पोल नहीं", "No polls right now")}</div>`;
+  document.querySelectorAll(".fz").forEach(e => e.innerHTML = h);
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-vote]"); if (!b) return;
+  const [id, i] = b.dataset.vote.split("|"); if (localStorage.getItem("voted_" + id) !== null) return;
+  localStorage.setItem("voted_" + id, i);
+  try { await updateDoc(doc(db, "polls", id), { [`counts.${i}`]: increment(1) }); } catch (err) { localStorage.removeItem("voted_" + id); alert(err.message); }
+  renderFan();
+});
+
+// ---------- poster ----------
+function renderPosterSel() { keepSel("posterMatch", S.matches.map(m => `<option value="${m.id}">${esc(teamLabel(m, "a"))} vs ${esc(teamLabel(m, "b"))}</option>`).join("")); }
+$("posterGen").onclick = async () => {
+  const m = S.matches.find(x => x.id === $("posterMatch").value); if (!m) return;
+  await drawMatchPoster($("posterCanvas"), m); $("posterBtns").classList.remove("hidden");
+  $("posterDl").onclick = () => downloadCanvas($("posterCanvas"), "JPL_poster.png");
+  $("posterWa").onclick = () => shareCanvas($("posterCanvas"), "JPL_poster.png", `🏏 Mini JPL\n${teamLabel(m, "a")} vs ${teamLabel(m, "b")}\n${resultText(m)}`);
+};
+
+// ---------- schedule / points / coaches ----------
+function renderSched() {
+  const st = m => m.status === "live" ? '<span class="tag livebadge">LIVE</span>' : (m.status === "done" || m.status === "draw") ? `<b style="color:var(--gold)">${esc(resultText(m))}</b>` : tr("आने वाला", "Upcoming");
+  $("matchTbl").innerHTML = `<tr><th>#</th><th>${tr("स्टेज", "Stage")}</th><th>${tr("मैच", "Match")}</th><th>${tr("समय", "Time")}</th><th>${tr("ग्राउंड", "Ground")}</th><th>${tr("स्टेटस / स्कोर / रिज़ल्ट (टैप करें)", "Status / Score / Result (tap)")}</th></tr>` +
+    (S.matches.map((m, i) => `<tr data-sc="${m.id}" style="cursor:pointer"><td>${i + 1}</td><td>${stageLabel(m.stage)}</td><td>${esc(teamLabel(m, "a"))} vs ${esc(teamLabel(m, "b"))}</td><td>${esc(fmtWhen(m))}</td><td>${esc(m.groundName || "")}</td>
+    <td>${st(m)}<br><small style="color:var(--mut)">${esc(scoreLine(m))}</small></td></tr>`).join("") || `<tr><td colspan=6>${tr("अभी कोई मैच नहीं", "No matches yet")}</td></tr>`);
+}
+function openScorecard(id) {
+  const m = S.matches.find(x => x.id === id); if (!m) return;
+  $("pBody").innerHTML = scorecardHTML(m) + `<button class="pri" onclick="document.getElementById('pModal').classList.remove('on')">${tr("बंद करें", "Close")}</button>`;
+  $("pModal").classList.add("on");
+}
+$("pubRoot").addEventListener("click", e => {
+  const sc = e.target.closest("[data-sc]")?.dataset.sc, pl = e.target.closest("[data-pl]")?.dataset.pl;
+  if (sc) openScorecard(sc); else if (pl) openProfile(pl);
+});
+function renderRank() {
+  const rows = playerRows().filter(r => r.mat > 0 || r.pts > 0).sort((a, b) => b.pts - a.pts || b.s.runs - a.s.runs);
+  $("rankTbl").innerHTML = `<tr><th>#</th><th>${tr("खिलाड़ी", "Player")}</th><th>${tr("मैच", "M")}</th><th>${tr("रन", "R")}</th><th>SR</th><th>${tr("विकेट", "W")}</th><th>Eco</th><th>${tr("कैच/स्टंप/RO", "C/St/RO")}</th><th>${tr("चौके/छक्के", "4s/6s")}</th><th>${tr("पॉइंट्स", "Pts")}</th></tr>` +
+    (rows.map((r, i) => `<tr data-pl="${r.p.id}" style="cursor:pointer"><td>${i + 1}</td><td>${esc(r.p.name)}</td><td>${r.mat}</td><td>${r.s.runs}</td><td>${r.b.sr}</td><td>${r.s.wkts}</td><td>${r.w.eco}</td><td>${r.s.catches + r.s.stumpings + r.s.runouts}</td><td>${r.s.fours}/${r.s.sixes}</td><td><b>${r.pts}</b></td></tr>`).join("") || `<tr><td colspan=10>${tr("अभी डेटा नहीं", "No data yet")}</td></tr>`);
+}
+
+function renderPoints() { renderRank();
+  $("ptsTbl").innerHTML = `<tr><th>#</th><th>${tr("टीम", "Team")}</th><th>P</th><th>W</th><th>L</th><th>T</th><th>NRR</th><th>${tr("अंक", "Pts")}</th></tr>` +
+    (standings().map((r, i) => `<tr><td>${i + 1}</td><td>${logo(r.t, 24)} ${esc(r.t.name)}</td><td>${r.P}</td><td>${r.W}</td><td>${r.L}</td><td>${r.T}</td><td>${r.nrr >= 0 ? "+" : ""}${r.nrr.toFixed(3)}</td><td><b>${r.pts}</b></td></tr>`).join("") || `<tr><td colspan=8>${tr("अभी डेटा नहीं", "No data yet")}</td></tr>`);
+  const L = leaders(), box = (title, cls, a, f) => `<div class="capbox ${cls}"><h4 style="margin:0 0 6px">${title}</h4>${a.length ? a.map((x, i) => `<div>${i + 1}. ${esc(x.p.name)} – <b>${f(x)}</b></div>`).join("") : `<div>${tr("अभी डेटा नहीं", "No data yet")}</div>`}</div>`;
+  $("caps").innerHTML = box(tr("🟠 ऑरेंज कैप (रन)", "🟠 Orange Cap (Runs)"), "cap-or", L.orange, x => `${x.v} (SR ${x.r.b.sr})`) +
+    box(tr("🟣 पर्पल कैप (विकेट)", "🟣 Purple Cap (Wickets)"), "cap-pu", L.purple, x => `${x.v} (Eco ${x.r.w.eco})`) +
+    box(tr("👑 सिक्सर किंग", "👑 Sixer King"), "cap-or", L.sixes, x => x.v) +
+    box(tr("⭐ MVP", "⭐ MVP"), "cap-pu", L.mvp, x => x.v + " pts");
+}
+function renderCoaches() {
+  $("coachList").innerHTML = S.coaches.map(c => `<div class="msg"><b>${esc(c.name)}</b> <span style="color:var(--mut)">${S.teams.filter(t => t.coach === c.name).map(t => "· " + esc(t.name)).join(" ")}</span></div>`).join("") || `<div>${tr("अभी कोई कोच नहीं", "No coaches yet")}</div>`;
+}
+
+// ---------- owner login ----------
+$("authBtn").onclick = () => me ? signOut(auth) : signInWithPopup(auth, new GoogleAuthProvider()).catch(e => alert((e.code || e.message)));
+window.__pubAuth = async u => {
+  me = u; myTeamId = null;
+  if (u) { const s = await getDoc(doc(db, "owners", (u.email || "").toLowerCase())).catch(() => null); myTeamId = s?.exists() ? s.data().teamId : null; }
+  $("myTeamBtn").classList.toggle("hidden", !myTeamId); renderAll();
+};
+applyLang();
+
+}
+{ // ===== ADMIN PANEL =====
+
+
+let tab = "tPlayers", started = false, selTeam = "", genPlan = [];
+const L = () => doc(db, "auctions", "live");
+const ps = p => p.payStatus || "pending";
+const delDoc = async (c, id) => { if (confirm(tr("हटाएं?", "Delete?"))) await deleteDoc(doc(db, c, id)); };
+const openModal = h => { $("modalBody").innerHTML = h; $("modal").classList.add("on"); };
+$("modal").onclick = e => { if (e.target === $("modal")) $("modal").classList.remove("on"); };
+
+// ---------- auth lock ----------
+document.querySelectorAll(".langBtn").forEach(b => b.onclick = toggleLang);
+onLang(() => { render(); });
+$("gBtn").onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => $("agMsg").innerHTML = `<div class="msg">❌ ${esc(e.code || e.message)}</div>`);
+$("logout").onclick = () => signOut(auth);
+let raf = 0; const sched = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(render); };
+window.__adminAuth = async u => {
+  if (u && ((u.email || "").toLowerCase() !== ADMIN_EMAIL || !u.emailVerified)) {
+    alert(tr("अनधिकृत एक्सेस - केवल टूर्नामेंट एडमिन के लिए", "Unauthorized Access - Restricted to Tournament Admin"));
+    await signOut(auth); location.hash = ""; return;
+  }
+  $("gate").classList.toggle("hidden", !!u); $("app").classList.toggle("hidden", !u);
+  if (u) { $("who").textContent = u.email; if (!started) { started = true; startData(sched); startAdminData(sched); } }
+};
+document.querySelectorAll("#adminRoot nav [data-tab]").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#adminRoot nav [data-tab]").forEach(x => x.classList.remove("on")); document.querySelectorAll("#adminRoot section").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); tab = b.dataset.tab; $(tab).classList.add("on"); render();
+});
+function render() {
+  if (!started) return;
+  ({ tPlayers: renderPlayers, tAuction: renderAuc, tScore: renderScore, tMatches: renderMatches, tTeams: renderTeams, tMedia: renderMedia, tSettings: renderSettings, tScan: () => { } })[tab]();
+  applyLang();
+}
+
+// ================= ADMIN REGISTRATION & WHATSAPP =================
+const feeOf = p => p.feePaid !== false;
+let apCardPlayer = null;
+$("apSave").onclick = async () => {
+  const btn = $("apSave"), name = $("apName").value.trim(), mobile = $("apMobile").value.trim(), file = $("apPhoto").files[0];
+  if (!name || !$("apAge").value || !$("apVillage").value.trim() || !/^[0-9]{10}$/.test(mobile) || !file) { $("apMsg").innerHTML = `<div class="msg" style="color:var(--bad)">${tr("नाम, उम्र, गाँव, 10 अंक का मोबाइल और फोटो ज़रूरी हैं", "Name, age, village, 10-digit mobile and photo are required")}</div>`; return; }
+  btn.disabled = true; $("apMsg").innerHTML = `<div class="msg">${tr("सेव हो रहा है...", "Saving...")}</div>`;
+  try {
+    const photo = await compress(file, 500, 0.85);
+    const p = { name, age: +$("apAge").value, village: $("apVillage").value.trim(), role: $("apRole").value, photo, teamId: "", teamName: "", payStatus: "paid", feePaid: $("apFee").value === "paid", auctionStatus: "pool", matches: 0, runs: 0, balls: 0, wkts: 0, overs: 0, runsGiven: 0, addedBy: "admin", createdAt: serverTimestamp(), t: Date.now() };
+    const ref = await addDoc(collection(db, "players"), p);
+    await setDoc(doc(db, "private_players", ref.id), { mobile, tshirt: $("apTsize").value, fee: cfg().entryFee, shot: "", status: "paid" });
+    apCardPlayer = { ...p, id: ref.id };
+    $("apOut").classList.remove("hidden");
+    await drawPlayerCard($("apCv"), apCardPlayer, location.origin + location.pathname + "?p=" + ref.id);
+    $("apMsg").innerHTML = `<div class="msg">✅ ${esc(name)} (${pidOf(ref.id)}) ${tr("रजिस्टर हो गया – अप्रूव्ड और नीलामी पूल में", "registered – approved and in auction pool")}</div>`;
+  } catch (err) { $("apMsg").innerHTML = `<div class="msg">❌ ${esc(err.message)}</div>`; }
+  btn.disabled = false;
+};
+$("apNew").onclick = () => { ["apName", "apAge", "apVillage", "apMobile", "apPhoto"].forEach(i => $(i).value = ""); $("apFee").value = "unpaid"; $("apMsg").innerHTML = ""; $("apOut").classList.add("hidden"); };
+$("apDl").onclick = () => downloadCanvas($("apCv"), pidOf(apCardPlayer.id) + ".png");
+$("apSh").onclick = () => shareCanvas($("apCv"), pidOf(apCardPlayer.id) + ".png", tr(`मेरा मिनी JPL प्लेयर कार्ड – ${apCardPlayer.name} (${pidOf(apCardPlayer.id)})`, `My Mini JPL Player Card – ${apCardPlayer.name} (${pidOf(apCardPlayer.id)})`));
+// बिकने के बाद WhatsApp: खिलाड़ी को या एडमिन (आप) को – आप टैप करके भेजेंगे
+function soldModal(pid, teamNm, price) {
+  const p = S.players.find(x => x.id === pid); if (!p) return;
+  const mob = (S.priv[pid] || {}).mobile || "";
+  const toPlayer = tr(`बधाई हो ${p.name}! 🎉 आपको ${teamNm} ने ${rupee(price)} में खरीदा है। मिनी JPL में आपका स्वागत है! आपकी ID: ${pidOf(pid)}`, `Congratulations ${p.name}! 🎉 ${teamNm} bought you for ${rupee(price)}. Welcome to Mini JPL! Your ID: ${pidOf(pid)}`);
+  const toAdmin = `🔨 SOLD: ${p.name} (${pidOf(pid)}) → ${teamNm} ${rupee(price)}`;
+  openModal(`<h3>🔨 ${esc(p.name)} ${tr("बिका!", "SOLD!")}</h3><div class="msg">${esc(teamNm)} • ${rupee(price)}</div>
+    ${mob ? `<a href="https://wa.me/91${mob}?text=${encodeURIComponent(toPlayer)}" target="_blank" style="text-decoration:none"><button class="pri wa">📩 ${tr("खिलाड़ी को WhatsApp करें", "WhatsApp the player")}</button></a>` : `<div class="msg">${tr("इस खिलाड़ी का मोबाइल नंबर नहीं मिला", "No mobile number on record")}</div>`}
+    <a href="https://wa.me/${cfg().adminWa}?text=${encodeURIComponent(toAdmin)}" target="_blank" style="text-decoration:none"><button class="pri">📩 ${tr("मुझे (एडमिन) WhatsApp पर भेजें", "Send to me (admin) on WhatsApp")}</button></a>
+    <button class="sm" onclick="document.getElementById('modal').classList.remove('on')">${tr("बंद करें", "Close")}</button>`);
+}
+
+// ================= PLAYERS =================
+const tagOf = s => s === "paid" ? `<span class="tag paid">${tr("Paid ✔", "Paid ✔")}</span>` : s === "rejected" ? `<span class="tag rej">${tr("रिजेक्ट", "Rejected")}</span>` : `<span class="tag pend">${tr("पेंडिंग", "Pending")}</span>`;
+function renderPlayers() {
+  const all = S.players, cnt = k => all.filter(p => ps(p) === k).length;
+  $("pStats").innerHTML = `<div class="stats"><div><b>${cnt("pending")}</b><small>${tr("पेंडिंग", "Pending")}</small></div><div><b>${cnt("paid")}</b><small>${tr("अप्रूव्ड", "Approved")}</small></div><div><b>${cnt("rejected")}</b><small>${tr("रिजेक्टेड", "Rejected")}</small></div></div>`;
+  const f = $("pFilter").value, list = all.filter(p => !f || ps(p) === f);
+  $("plTbl").innerHTML = `<tr><th></th><th>${tr("नाम", "Name")}</th><th>${tr("रोल/टीम", "Role/Team")}</th><th>${tr("मोबाइल", "Mobile")}</th><th>${tr("स्टेटस", "Status")}</th><th>${tr("एक्शन", "Actions")}</th></tr>` + list.map(p => {
+    const pr = S.priv[p.id] || {}, wa = pr.mobile ? `https://wa.me/91${pr.mobile}?text=${encodeURIComponent(`बधाई हो ${p.name}! आपका मिनी JPL रजिस्ट्रेशन कन्फर्म हो गया है। / Congratulations ${p.name}! Your Mini JPL registration is confirmed. ID: ${pidOf(p.id)}`)}` : "";
+    return `<tr><td><img class="th" src="${p.photo}" data-img="${p.id}"></td><td>${esc(p.name)}<br><small>${pidOf(p.id)} • ${p.age} • ${esc(p.village || "")}</small></td><td>${roleLabel(p.role)}<br><small>${esc(p.teamName || "—")}</small></td>
+    <td>${esc(pr.mobile || "")}</td><td>${tagOf(ps(p))} ${feeOf(p) ? `<span class="tag paid">💰 Paid</span>` : `<span class="tag pend">💰 Unpaid</span>`}</td><td><button class="sm" data-fee="${p.id}">💰 ${tr("फीस बदलें", "Toggle fee")}</button><button class="sm" data-shot="${p.id}">${tr("स्क्रीनशॉट देखें", "View Screenshot")}</button>
+    <button class="sm ok" data-appr="${p.id}">${tr("Approve (Paid)", "Approve (Mark Paid)")}</button><button class="sm bad" data-rej="${p.id}">${tr("Reject", "Reject")}</button>
+    ${wa ? `<a href="${wa}" target="_blank"><button class="sm wa">📩</button></a>` : ""}<button class="sm" data-del="${p.id}">🗑</button></td></tr>`; }).join("");
+  keepSel("sPlayer", S.players.map(p => `<option value="${p.id}">${esc(p.name)} (${pidOf(p.id)})</option>`).join(""));
+  keepSel("sTeam", `<option value="">—</option>` + S.teams.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join(""));
+  if (!$("sRuns").dataset.f) { fillStats(); $("sRuns").dataset.f = 1; }
+}
+$("pFilter").onchange = renderPlayers;
+$("plTbl").onclick = async e => {
+  const g = a => e.target.closest(`[${a}]`)?.getAttribute(a);
+  if (g("data-img")) { openModal(`<img class="big" src="${S.players.find(x => x.id === g("data-img")).photo}">`); }
+  else if (g("data-shot")) { const id = g("data-shot"), s = S.priv[id]?.shot; openModal(`<h3>${esc(S.players.find(x => x.id === id)?.name)}</h3>${s ? `<img class="big" src="${s}">` : "—"}<div class="row"><button class="pri ok" id="mAp">${tr("Approve (Mark Paid)", "Approve (Mark Paid)")}</button><button class="pri bad" id="mRj">${tr("Reject", "Reject")}</button></div>`); $("mAp").onclick = () => { approve(id); $("modal").classList.remove("on"); }; $("mRj").onclick = () => { reject(id); $("modal").classList.remove("on"); }; }
+  else if (g("data-fee")) { const id = g("data-fee"), pl = S.players.find(x => x.id === id); await updateDoc(doc(db, "players", id), { feePaid: !feeOf(pl) }); }
+  else if (g("data-appr")) approve(g("data-appr")); else if (g("data-rej")) reject(g("data-rej"));
+  else if (g("data-del")) { const id = g("data-del"); if (confirm(tr("खिलाड़ी हटाएं?", "Delete player?"))) { await deleteDoc(doc(db, "players", id)); await deleteDoc(doc(db, "private_players", id)); } }
+};
+async function approve(id) { const p = S.players.find(x => x.id === id), b = writeBatch(db);
+  b.update(doc(db, "players", id), { payStatus: "paid", feePaid: true, auctionStatus: p.teamId ? "sold" : "pool" }); b.update(doc(db, "private_players", id), { status: "paid" }); await b.commit(); }
+async function reject(id) { const b = writeBatch(db); b.update(doc(db, "players", id), { payStatus: "rejected", auctionStatus: "" }); b.update(doc(db, "private_players", id), { status: "rejected" }); await b.commit(); }
+function fillStats() { const p = S.players.find(x => x.id === $("sPlayer").value); if (!p) return;
+  $("sRole").value = roleKey(p.role); $("sTeam").value = p.teamId || ""; $("sVillage").value = p.village || "";
+  $("sMatches").value = p.matches || 0; $("sRuns").value = p.runs || 0; $("sBalls").value = p.balls || 0; $("sWkts").value = p.wkts || 0; $("sOvers").value = p.overs || 0; $("sRunsGiven").value = p.runsGiven || 0; }
+$("sPlayer").onchange = fillStats;
+$("sSaveP").onclick = async () => { const id = $("sPlayer").value; if (!id) return; const t = teamOf($("sTeam").value);
+  await updateDoc(doc(db, "players", id), { role: $("sRole").value, teamId: $("sTeam").value, teamName: t ? t.name : "", village: $("sVillage").value.trim(), matches: +$("sMatches").value || 0, runs: +$("sRuns").value || 0, balls: +$("sBalls").value || 0, wkts: +$("sWkts").value || 0, overs: +$("sOvers").value || 0, runsGiven: +$("sRunsGiven").value || 0 });
+  $("sMsg").innerHTML = `<div class="msg">✅ ${tr("सेव हो गया", "Saved")}</div>`; };
+$("csvBtn").onclick = () => {
+  const rows = [["ID", "Name", "Age", "Village", "Role", "Team", "Sold Price", "Mobile", "T-Shirt", "Status"]].concat(S.players.map(p => { const r = S.priv[p.id] || {}; return [pidOf(p.id), p.name, p.age, p.village, roleLabel(p.role), p.teamName, p.soldPrice, r.mobile, r.tshirt, ps(p)]; }));
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["\ufeff" + rows.map(r => r.map(v => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\n")], { type: "text/csv;charset=utf-8" })); a.download = "JPL_players.csv"; a.click(); };
+$("printBtn").onclick = () => {
+  const w = window.open(""), c = cfg();
+  w.document.write(`<html><head><meta charset="utf-8"><title>Auction Sheet</title><style>body{font-family:sans-serif}table{border-collapse:collapse;width:100%}td,th{border:1px solid #333;padding:6px;font-size:13px}img{width:44px;height:44px;object-fit:cover}</style></head><body><h2>Mini JPL – Official Auction Sheet</h2><p>Base Price: ${rupee(c.basePrice)}</p><table><tr><th>#</th><th></th><th>ID</th><th>Name</th><th>Village</th><th>Role</th><th>Base</th><th>Sold To</th><th>Final Price</th></tr>${approved().map((p, i) => `<tr><td>${i + 1}</td><td><img src="${p.photo}"></td><td>${pidOf(p.id)}</td><td>${esc(p.name)}</td><td>${esc(p.village || "")}</td><td>${roleLabel(p.role)}</td><td>${rupee(c.basePrice)}</td><td>${esc(p.teamName || "")}</td><td>${p.soldPrice ? rupee(p.soldPrice) : ""}</td></tr>`).join("")}</table></body></html>`);
+  w.document.close(); setTimeout(() => w.print(), 400); };
+
+// ================= AUCTION =================
+const slots = t => cfg().squadSize - S.players.filter(p => p.teamId === t.id).length;
+const maxBid = t => { const s = slots(t); return s <= 0 ? 0 : t.purse - (s - 1) * cfg().basePrice; };
+const aucOn = () => !!S.settings.auctionOn;
+$("aucToggle").onclick = () => setDoc(doc(db, "settings", "main"), { auctionOn: !aucOn() }, { merge: true });
+const poolList = () => approved().filter(p => !p.teamId && p.auctionStatus !== "unsold" && p.auctionStatus !== "sold" && p.id !== S.live?.playerId);
+function renderAuc() {
+  const on = aucOn(); $("aucState").innerHTML = on ? `<span style="color:var(--ok)">🟢 ${tr("ऑक्शन चालू है", "Auction is ON")}</span>` : `<span style="color:var(--bad)">🔴 ${tr("ऑक्शन बंद है", "Auction is OFF")}</span>`;
+  $("aucToggle").textContent = on ? tr("⏸ ऑक्शन बंद करें", "⏸ Turn Auction OFF") : tr("▶ ऑक्शन चालू करें", "▶ Turn Auction ON"); $("aucToggle").style.background = on ? "var(--bad)" : "var(--ok)";
+  const pool = poolList(), uns = S.players.filter(p => p.auctionStatus === "unsold");
+  $("aCounts").textContent = tr(`पूल: ${pool.length} • अनबिके: ${uns.length} • बिके: ${S.players.filter(p => p.auctionStatus === "sold").length}`, `Pool: ${pool.length} • Unsold: ${uns.length} • Sold: ${S.players.filter(p => p.auctionStatus === "sold").length}`);
+  keepSel("aPool", pool.map(p => `<option value="${p.id}">${esc(p.name)} (${roleLabel(p.role)})</option>`).join("") || `<option value="">—</option>`);
+  renderAList();
+  const l = S.live, p = l?.playerId ? S.players.find(x => x.id === l.playerId) : null, v = $("aBid")?.value || "";
+  if (!p) { $("aCtl").innerHTML = `<div style="color:var(--mut)">${tr("कोई नीलामी चालू नहीं", "No active auction")}</div>`; return; }
+  const live = l.status === "live" && on, base = l.base;
+  $("aCtl").innerHTML = `<div class="msg"><b>${esc(p.name)}</b> • ${tr("बेस", "Base")} ${rupee(base)} • ${tr("अभी", "Now")} <b style="color:var(--gold)">${rupee(l.bid)}</b> ${l.bidTeamId ? "(" + esc(teamName(l.bidTeamId)) + ")" : ""} • ${l.status}</div>
+    ${!on ? `<div class="msg" style="color:var(--bad)">${tr("ऑक्शन बंद है – पहले चालू करें", "Auction is OFF – turn it ON first")}</div>` : ""}
+    <label>${tr("बोली लगाने वाली टीम चुनें", "Select bidding team")}</label>
+    <div class="btns">${S.teams.map(t => { const mx = maxBid(t), nxt = l.bidTeamId ? l.bid + 1 : l.bid, dis = !live || mx < nxt; return `<button data-team="${t.id}" class="${selTeam === t.id ? "sel" : ""}" ${dis ? "disabled" : ""} style="font-size:14px">${esc(t.name)}<br><small>${rupee(t.purse)} • ${slots(t)} ${tr("स्लॉट", "slots")} • max ${rupee(Math.max(mx, 0))}</small></button>`; }).join("")}</div>
+    <div class="btns"><button data-inc="0" ${!live || l.bidTeamId || !selTeam ? "disabled" : ""}>${tr("बेस", "Base")}</button>${[50, 100, 200, 500].map(n => `<button data-inc="${n}" ${!live || !l.bidTeamId || !selTeam || l.bid + n > maxBid(teamOf(selTeam) || { purse: 0 }) ? "disabled" : ""}>+₹${n}</button>`).join("")}</div>
+    <div class="row"><input id="aBid" type="number" placeholder="${tr("कस्टम बोली (₹)", "Custom bid (₹)")}" value="${esc(v)}"><button class="sm" id="aBidGo" ${!live ? "disabled" : ""}>${tr("बोली लगाएं", "Place Bid")}</button></div>
+    <div class="btns"><button class="sm" id="aUndo" ${!live || !(l.history || []).length ? "disabled" : ""}>↩️ ${tr("आखिरी बोली हटाएं", "Undo Last Bid")}</button><button class="sm ok" id="aSold" ${!live || !l.bidTeamId ? "disabled" : ""}>🔨 SOLD</button><button class="sm bad" id="aUns" ${!live ? "disabled" : ""}>UNSOLD</button></div>`;
+}
+async function place(tid, amt) {
+  const l = S.live, t = teamOf(tid); if (!aucOn() || !l || l.status !== "live" || !t) return;
+  if (amt < (l.bidTeamId ? l.bid + 1 : l.base)) { alert(tr("बोली पिछली बोली से ज़्यादा होनी चाहिए", "Bid must be higher than current")); return; }
+  if (amt > maxBid(t)) { alert(tr("टीम का पर्स/स्क्वाड सीमा पार – बोली नहीं हो सकती", "Exceeds team's purse / squad reserve")); return; }
+  await updateDoc(L(), { bid: amt, bidTeamId: tid, history: [...(l.history || []), { teamId: l.bidTeamId || "", bid: l.bid }], ts: Date.now() });
+}
+$("aCtl").onclick = async e => {
+  const g = a => e.target.closest(`[${a}]`)?.getAttribute(a), l = S.live;
+  if (g("data-team")) { selTeam = g("data-team"); renderAuc(); }
+  else if (g("data-inc") !== null && e.target.closest("[data-inc]")) { const n = +g("data-inc"); await place(selTeam, n === 0 ? l.base : l.bid + n); }
+  else if (e.target.id === "aBidGo") { const v = +$("aBid").value; if (!selTeam) { alert(tr("पहले टीम चुनें", "Select a team first")); return; } await place(selTeam, v); $("aBid").value = ""; }
+  else if (e.target.closest("#aUndo")) { const h = [...(l.history || [])], pr = h.pop(); await updateDoc(L(), { bid: pr.bid, bidTeamId: pr.teamId, history: h }); }
+  else if (e.target.closest("#aSold")) { enableSound(); gavel(); const t = teamOf(l.bidTeamId), b = writeBatch(db);
+    b.update(doc(db, "players", l.playerId), { teamId: t.id, teamName: t.name, soldPrice: l.bid, auctionStatus: "sold" }); b.update(doc(db, "teams", t.id), { purse: increment(-l.bid) });
+    b.update(L(), { status: "sold", soldAt: Date.now() }); await b.commit(); confetti(2500); soldModal(l.playerId, t.name, l.bid); selTeam = ""; }
+  else if (e.target.closest("#aUns")) { const b = writeBatch(db); b.update(doc(db, "players", l.playerId), { auctionStatus: "unsold" }); b.update(L(), { status: "unsold", soldAt: Date.now() }); await b.commit(); selTeam = ""; }
+};
+async function startAuc(pid) { if (!aucOn()) { alert(tr("पहले ऑक्शन चालू करें", "Turn the auction ON first")); return; } if (!pid) return; const base = cfg().basePrice;
+  const pl = S.players.find(x => x.id === pid); if (!pl) return;
+  if (S.live && S.live.status === "live" && S.live.playerId !== pid && !confirm(tr("अभी एक नीलामी चालू है। उसे हटाकर नया खिलाड़ी लाएं?", "An auction is live. Replace it with this player?"))) return;
+  const b = writeBatch(db);
+  if (pl.teamId) { // पहले बिका था – पर्स वापस करके दोबारा नीलामी
+    if (!confirm(tr(`${pl.name} पहले ${pl.teamName || "टीम"} को ${rupee(pl.soldPrice || 0)} में बिका था। दोबारा नीलामी करने पर वह टीम से हटेगा और पर्स वापस होगा। जारी रखें?`, `${pl.name} was sold to ${pl.teamName || "a team"} for ${rupee(pl.soldPrice || 0)}. Re-auction will remove him from the team and refund the purse. Continue?`))) return;
+    if (pl.soldPrice) b.update(doc(db, "teams", pl.teamId), { purse: increment(pl.soldPrice) });
+    b.update(doc(db, "players", pid), { teamId: "", teamName: "", soldPrice: 0, auctionStatus: "pool" });
+  } else b.update(doc(db, "players", pid), { auctionStatus: "pool" });
+  b.set(L(), { playerId: pid, base, bid: base, bidTeamId: "", history: [], status: "live", ts: Date.now() }); await b.commit(); selTeam = "";
+  window.scrollTo({ top: 0, behavior: "smooth" }); }
+function renderAList() {
+  const q = ($("alQ").value || "").trim().toLowerCase(), f = $("alF").value, lid = S.live?.status === "live" ? S.live.playerId : null;
+  const st = x => x.id === lid ? "live" : x.teamId ? "sold" : x.auctionStatus === "unsold" ? "unsold" : x.auctionStatus === "sold" ? "sold" : "new";
+  const arr = approved().filter(x => (!q || (x.name || "").toLowerCase().includes(q)) && (f === "all" || (f === "new" ? ["new"].includes(st(x)) : st(x) === f)));
+  const lab = { new: ["pend", tr("🆕 नया", "🆕 New")], sold: ["paid", ""], unsold: ["rej", tr("अनबिका", "Unsold")], live: ["livebadge", "LIVE"] };
+  $("aList").innerHTML = arr.map(x => { const k = st(x), tag = k === "sold" ? tr("✅ बिका", "✅ Sold") + (x.teamName ? " – " + esc(x.teamName) : "") + (x.soldPrice ? " " + rupee(x.soldPrice) : "") : lab[k][1];
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)">
+      ${x.photo ? `<img class="th" src="${x.photo}" style="border-radius:50%">` : `<span class="th" style="display:inline-block;background:#0d2145;border-radius:50%"></span>`}
+      <div style="flex:1;min-width:0"><b>${esc(x.name)}</b> <small style="color:var(--mut)">${roleLabel(x.role)}${x.village ? " • " + esc(x.village) : ""}</small><br><span class="tag ${lab[k][0]}">${tag}</span></div>
+      <button class="sm ok" data-pick="${x.id}" ${k === "live" ? "disabled" : ""}>🔨 ${tr("नीलामी में लाओ", "Bring to Auction")}</button></div>`; }).join("") || `<div style="color:var(--mut)">${tr("कोई खिलाड़ी नहीं मिला", "No players found")}</div>`;
+}
+$("alQ").oninput = renderAList; $("alF").onchange = renderAList;
+$("aList").onclick = e => { const id = e.target.closest("[data-pick]")?.getAttribute("data-pick"); if (id) startAuc(id); };
+$("aStart").onclick = () => startAuc($("aPool").value);
+$("aRandom").onclick = () => { const p = poolList(); if (p.length) startAuc(p[Math.floor(Math.random() * p.length)].id); };
+$("aClear").onclick = () => deleteDoc(L());
+$("aReauc").onclick = async () => { const u = S.players.filter(p => p.auctionStatus === "unsold"); if (!u.length) return; const b = writeBatch(db); u.forEach(p => b.update(doc(db, "players", p.id), { auctionStatus: "pool" })); await b.commit(); };
+
+// ================= SCORING & MATCHES =================
+const pad = n => String(n).padStart(2, "0"), toLocal = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const groundOpts = sel => `<option value="">—</option>` + S.grounds.map(g => `<option value="${g.id}" ${g.id === sel ? "selected" : ""}>${esc(g.name)}</option>`).join("");
+const teamOpts = sel => `<option value="">${tr("तय नहीं", "TBD")}</option>` + S.teams.map(t => `<option value="${t.id}" ${t.id === sel ? "selected" : ""}>${esc(t.name)}</option>`).join("");
+const xiFor = (m, tid) => tid === m.aTeamId ? (m.xiA || []) : (m.xiB || []);
+const poolFor = (m, tid) => { const x = xiFor(m, tid); return x.length ? x : S.players.filter(p => p.teamId === tid).map(p => p.id); };
+const xiOK = m => !!m.aTeamId && !!m.bTeamId && !!m.firstBatId && (m.xiA || []).length > 0 && (m.xiB || []).length > 0;
+const isOpen = m => m.status === "upcoming" || m.status === "live";
+const pName = id => S.players.find(p => p.id === id)?.name || "";
+const optsOf = ids => ids.map(id => `<option value="${id}">${esc(pName(id))}</option>`).join("") || `<option value="">—</option>`;
+
+function renderScore() {
+  const open = S.matches.filter(isOpen);
+  keepSel("scMatch", open.map(m => `<option value="${m.id}">${esc(teamLabel(m, "a"))} vs ${esc(teamLabel(m, "b"))} (${stageLabel(m.stage)})${m.status === "live" ? " 🔴" : ""}</option>`).join(""));
+  const m = open.find(x => x.id === $("scMatch").value);
+  if (!m) { $("scInfo").innerHTML = `<div class="msg">${tr("कोई खुला मैच नहीं। खत्म हो चुके मैच यहाँ नहीं दिखते।", "No open match. Finished matches are hidden here.")}</div>`; ["scBat", "scBatter", "scBowler", "scFielder"].forEach(i => $(i).innerHTML = ""); return; }
+  const li = liveInfo(m), bat = batFor(m, li.cur), bow = bat === m.aTeamId ? m.bTeamId : m.aTeamId;
+  $("scInn").value = String(li.cur); $("scInn").disabled = true;
+  $("scBat").innerHTML = `<option value="${bat}">${esc(teamName(bat))}</option>`; $("scBat").value = bat; $("scBat").disabled = true;
+  const outs = new Set(S.balls.filter(b => b.matchId === m.id && (b.inn || 1) === li.cur && b.wicket).map(b => b.batterId));
+  keepSel("scBatter", optsOf(poolFor(m, bat).filter(id => !outs.has(id))));
+  keepSel("scBowler", optsOf(poolFor(m, bow)));
+  keepSel("scFielder", `<option value="">—</option>` + optsOf(poolFor(m, bow)));
+  const cur = li.i, balls = S.balls.filter(b => b.matchId === m.id && (b.inn || 1) === li.cur).sort((a, b) => (a.t || 0) - (b.t || 0));
+  const warn = !m.firstBatId ? tr("⚠️ पहले 🪙 टॉस करें (शेड्यूल लिस्ट में)", "⚠️ Do the toss first (in Schedule list)") : !xiOK(m) ? tr("⚠️ दोनों टीमों की प्लेइंग XI चुनें (👥)", "⚠️ Select playing XI for both teams (👥)") : "";
+  const crr = cur && cur.legal ? (cur.runs / (cur.legal / 6)).toFixed(2) : "0.00";
+  $("scInfo").innerHTML = (warn ? `<div class="msg" style="color:var(--bad)">${warn}</div>` : "")
+    + `<div class="msg"><b>${esc(teamName(bat))}</b> <span class="score">${cur ? cur.runs : 0}/${cur ? cur.wkts : 0}</span> (${oversOf(cur ? cur.legal : 0)}/${Math.floor(li.maxBalls / 6)} ${tr("ओवर", "ov")}) • CRR ${crr}`
+    + (li.cur === 2 && li.target ? ` • ${tr("लक्ष्य", "Target")} <b>${li.target}</b> • ${tr("चाहिए", "Need")} ${Math.max(li.need, 0)} / ${li.left} • RRR ${li.rrr != null ? li.rrr.toFixed(2) : "—"}` : "") + `</div>`
+    + (li.c1 && !cur ? `<div class="msg" style="color:var(--gold)">🔁 ${tr("पहली पारी पूरी! दूसरी पारी का पहला बॉल डालें", "1st innings over! Bowl the first ball of 2nd innings")}</div>` : "")
+    + `<div style="margin-top:6px">${chipsHTML(balls.slice(-12))}</div>`
+    + balls.slice(-5).reverse().map(b => `<div class="msg">${esc(commentary(b))}</div>`).join("");
+}
+$("scMatch").addEventListener("change", renderScore);
+$("scBtns").onclick = async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const m = S.matches.find(x => x.id === $("scMatch").value);
+  if (!m || !isOpen(m)) { alert(tr("खुला मैच चुनें", "Select an open match")); return; }
+  if (!xiOK(m)) { alert(tr("पहले टॉस और दोनों टीमों की प्लेइंग XI चुनें (शेड्यूल लिस्ट में)", "Set toss and both playing XI first (Schedule list)")); return; }
+  if (liveInfo(m).done) { alert(tr("मैच पूरा हो चुका है", "Match is already complete")); return; }
+  if (!$("scBatter").value || !$("scBowler").value) { alert(tr("बल्लेबाज और गेंदबाज चुनें", "Select striker and bowler")); return; }
+  const k = liveInfo(m).cur;
+  const d = { matchId: m.id, inn: k, batTeamId: batFor(m, k), batterId: $("scBatter").value, bowlerId: $("scBowler").value, fielderId: "", runs: 0, extra: "", extraRuns: 0, wicket: false, dismissal: "", cmi: randomCmi(), note: $("scNote").value.trim(), t: Date.now(), createdAt: serverTimestamp() };
+  if (b.dataset.r) d.runs = +b.dataset.r;
+  if (b.dataset.x) { d.extra = b.dataset.x; d.extraRuns = 1; }
+  if (b.dataset.w) { d.wicket = true; d.dismissal = $("scDis").value; if (["caught", "runout", "stumped"].includes(d.dismissal)) d.fielderId = $("scFielder").value || ""; }
+  await addDoc(collection(db, "balls"), d);
+  if (m.status === "upcoming") await updateDoc(doc(db, "matches", m.id), { status: "live", liveAt: Date.now() });
+  $("scNote").value = "";
+};
+$("scUndo").onclick = async () => {
+  const m = S.matches.find(x => x.id === $("scMatch").value); if (!m) return;
+  const last = S.balls.filter(b => b.matchId === m.id).sort((a, b) => (a.t || 0) - (b.t || 0)).pop();
+  if (!last || !confirm(tr("आखिरी बॉल हटाएं?", "Undo last ball?"))) return;
+  await deleteDoc(doc(db, "balls", last.id));
+  if (m.status === "done") await updateDoc(doc(db, "matches", m.id), { status: "live", winnerId: "", res: null, result: "" });
+};
+async function drawMatch(m) {
+  const r = prompt(tr("ड्रॉ का कारण लिखें (जैसे बारिश, अंधेरा)", "Reason for draw (e.g. rain, darkness)")); if (r === null) return;
+  await updateDoc(doc(db, "matches", m.id), { status: "draw", winnerId: "", res: { type: "draw", reason: r.trim() || tr("कारण नहीं लिखा", "No reason given") }, result: "", endedAt: Date.now() });
+}
+$("scDraw").onclick = () => { const m = S.matches.find(x => x.id === $("scMatch").value); if (m && isOpen(m)) drawMatch(m); };
+
+function tossModal(m) {
+  openModal(`<h3>🪙 ${tr("टॉस", "Toss")}</h3><label>${tr("टॉस किसने जीता", "Toss won by")}</label><select id="tsW"><option value="${m.aTeamId}">${esc(teamName(m.aTeamId))}</option><option value="${m.bTeamId}">${esc(teamName(m.bTeamId))}</option></select>
+    <label>${tr("फैसला", "Decision")}</label><select id="tsD"><option value="bat">${tr("पहले बैटिंग", "Bat first")}</option><option value="bowl">${tr("पहले बॉलिंग", "Bowl first")}</option></select>
+    <button class="pri" id="tsSave">${tr("सेव करें", "Save")}</button>`);
+  $("tsSave").onclick = async () => { const w = $("tsW").value, d = $("tsD").value, first = d === "bat" ? w : (w === m.aTeamId ? m.bTeamId : m.aTeamId);
+    await updateDoc(doc(db, "matches", m.id), { toss: { winnerId: w, decision: d }, firstBatId: first }); $("modal").classList.remove("on"); };
+}
+function xiModal(m) {
+  const pick = (tid, side) => { const cur = new Set(xiFor(m, tid)); return `<h4 style="margin:10px 0 4px">${esc(teamName(tid))} (${cur.size})</h4>` + (S.players.filter(p => p.teamId === tid).map(p => `<label style="display:flex;align-items:center;gap:8px;margin:4px 0"><input type="checkbox" class="xi${side}" value="${p.id}" ${cur.has(p.id) ? "checked" : ""}> ${esc(p.name)} <small style="color:var(--mut)">${roleLabel(p.role)}</small></label>`).join("") || `<div>${tr("इस टीम में खिलाड़ी नहीं", "No players in this team")}</div>`); };
+  openModal(`<h3>👥 ${tr("प्लेइंग XI (11 तक)", "Playing XI (up to 11)")}</h3>${m.aTeamId && m.bTeamId ? pick(m.aTeamId, "A") + pick(m.bTeamId, "B") : `<div>${tr("पहले दोनों टीमें तय करें", "Set both teams first")}</div>`}<button class="pri" id="xiSave">${tr("सेव करें", "Save")}</button>`);
+  $("xiSave").onclick = async () => {
+    const a = [...document.querySelectorAll(".xiA:checked")].map(x => x.value), b = [...document.querySelectorAll(".xiB:checked")].map(x => x.value);
+    if (!a.length || !b.length || a.length > 11 || b.length > 11) { alert(tr("दोनों टीमों से 1 से 11 खिलाड़ी चुनें", "Pick 1 to 11 players from each team")); return; }
+    await updateDoc(doc(db, "matches", m.id), { xiA: a, xiB: b }); $("modal").classList.remove("on");
+  };
+}
+
+function renderMatches() {
+  if (!$("genTeams").dataset.n || +$("genTeams").dataset.n !== S.teams.length) { $("genTeams").dataset.n = S.teams.length; $("genTeams").innerHTML = S.teams.map(t => `<label style="display:inline-flex;gap:6px;margin-right:12px"><input type="checkbox" class="gt" value="${t.id}" checked> ${esc(t.name)}</label>`).join("") || "—"; }
+  keepSel("genGround", groundOpts("")); if (!$("genOvers").value) $("genOvers").value = cfg().overs;
+  const tOpts = `<option value="">—</option>` + S.teams.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join("");
+  keepSel("mkA", tOpts); keepSel("mkB", tOpts); keepSel("mkG", groundOpts("")); if (!$("mkO").value) $("mkO").value = cfg().overs;
+  if (document.activeElement !== $("drMin")) $("drMin").value = S.settings.drawMinutes || 60;
+  if (document.activeElement && $("mList").contains(document.activeElement)) return;
+  $("mList").innerHTML = S.matches.map(m => {
+    const open = isOpen(m);
+    const warn = open && (!m.aTeamId || !m.bTeamId) ? tr("⚠️ टीम तय नहीं", "⚠️ Teams TBD") : open && !m.firstBatId ? tr("⚠️ टॉस बाकी", "⚠️ Toss pending") : open && !xiOK(m) ? tr("⚠️ XI बाकी", "⚠️ XI pending") : "";
+    const tag = m.status === "live" ? '<span class="tag livebadge">LIVE</span>' : m.status === "done" ? '<span class="tag paid">DONE</span>' : m.status === "draw" ? '<span class="tag pend">DRAW</span>' : "";
+    return `<div class="msg" data-m="${m.id}"><span class="tag role">${stageLabel(m.stage)}</span> ${tag} ${warn ? `<span style="color:var(--bad);font-size:13px">${warn}</span>` : ""}
+    ${!open ? `<div style="color:var(--gold);font-weight:700;margin:4px 0">${esc(resultText(m))}</div>` : ""}<small style="color:var(--mut)">${esc(scoreLine(m))}</small>
+    <div class="row"><select data-f="a">${teamOpts(m.aTeamId)}</select><select data-f="b">${teamOpts(m.bTeamId)}</select></div>
+    <div class="row3"><input type="datetime-local" data-f="w" value="${esc(m.whenISO || "")}"><select data-f="g">${groundOpts(m.groundId)}</select><input type="number" data-f="o" value="${m.overs || ""}" placeholder="${tr("ओवर", "Overs")}"></div>
+    <div class="btns"><button class="sm ok" data-act="save">${tr("सेव", "Save")}</button>
+    ${open && m.aTeamId && m.bTeamId ? `<button class="sm" data-act="toss">🪙 ${tr("टॉस", "Toss")}${m.firstBatId ? " ✔" : ""}</button><button class="sm" data-act="xi">👥 XI${xiOK(m) ? " ✔" : ""}</button>` : ""}
+    ${m.status === "upcoming" && m.aTeamId && m.bTeamId ? `<button class="sm" data-act="start">▶ ${tr("अभी शुरू", "Start now")}</button>` : ""}
+    ${open ? `<button class="sm bad" data-act="draw">🛑 ${tr("ड्रॉ (कारण)", "Draw (reason)")}</button>` : ""}
+    <button class="sm" data-act="sc">📋 ${tr("स्कोरकार्ड", "Scorecard")}</button><button class="sm" data-act="poster">🖼 ${tr("पोस्टर", "Poster")}</button><button class="sm" data-act="poll">🎯 ${tr("पोल", "Poll")}</button><button class="sm" data-act="del">🗑</button></div></div>`;
+  }).join("") || `<div>${tr("अभी कोई मैच नहीं", "No matches yet")}</div>`;
+}
+$("drSave").onclick = () => setDoc(doc(db, "settings", "main"), { drawMinutes: +$("drMin").value || 60 }, { merge: true });
+$("mkSave").onclick = async () => {
+  const a = teamOf($("mkA").value), b = teamOf($("mkB").value);
+  if (!a || !b || a.id === b.id) { alert(tr("दो अलग-अलग टीमें चुनें", "Pick two different teams")); return; }
+  const g = S.grounds.find(x => x.id === $("mkG").value);
+  await addDoc(collection(db, "matches"), { stage: $("mkS").value, aTeamId: a.id, bTeamId: b.id, aName: a.name, bName: b.name, aLabel: "", bLabel: "", whenISO: $("mkW").value, groundId: g?.id || "", groundName: g?.name || "", overs: +$("mkO").value || cfg().overs, status: "upcoming", result: "", seq: Date.now(), t: Date.now(), createdAt: serverTimestamp() });
+  $("mkW").value = ""; alert("✅ " + tr("मैच जुड़ गया", "Match added"));
+};
+$("mList").onclick = async e => {
+  const box = e.target.closest("[data-m]"), act = e.target.closest("[data-act]")?.dataset.act; if (!box || !act) return;
+  const m = S.matches.find(x => x.id === box.dataset.m), q = f => box.querySelector(`[data-f=${f}]`).value;
+  if (act === "del") return delDoc("matches", m.id);
+  if (act === "save") {
+    const a = teamOf(q("a")), b = teamOf(q("b")), g = S.grounds.find(x => x.id === q("g"));
+    const upd = { aTeamId: a?.id || "", bTeamId: b?.id || "", aName: a?.name || "", bName: b?.name || "", whenISO: q("w"), groundId: g?.id || "", groundName: g?.name || "", overs: +q("o") || 0 };
+    if ((m.aTeamId || "") !== upd.aTeamId || (m.bTeamId || "") !== upd.bTeamId) { upd.xiA = []; upd.xiB = []; upd.toss = null; upd.firstBatId = ""; }
+    await updateDoc(doc(db, "matches", m.id), upd);
+  }
+  if (act === "toss") tossModal(m);
+  if (act === "xi") xiModal(m);
+  if (act === "start") {
+    if (!xiOK(m)) { alert(tr("शुरू करने से पहले टॉस और दोनों टीमों की XI चुनें", "Set toss and both playing XI before starting")); return; }
+    await updateDoc(doc(db, "matches", m.id), { status: "live", liveAt: Date.now() });
+  }
+  if (act === "draw") drawMatch(m);
+  if (act === "sc") openModal(scorecardHTML(m) + `<button class="pri" onclick="document.getElementById('modal').classList.remove('on')">${tr("बंद करें", "Close")}</button>`);
+  if (act === "poster") { openModal(`<canvas id="pcv" style="max-width:100%;border-radius:10px"></canvas><div class="row"><button class="pri" id="pDl">⬇️ PNG</button><button class="pri wa" id="pSh">WhatsApp</button></div>`); await drawMatchPoster($("pcv"), m);
+    $("pDl").onclick = () => downloadCanvas($("pcv"), "JPL_match_poster.png"); $("pSh").onclick = () => shareCanvas($("pcv"), "JPL_match_poster.png", `🏏 Mini JPL — ${teamLabel(m, "a")} vs ${teamLabel(m, "b")}\n${fmtWhen(m)} ${m.groundName || ""}`); }
+  if (act === "poll") { if (!m.aTeamId || !m.bTeamId) { alert(tr("पहले दोनों टीमें तय करें", "Set both teams first")); return; }
+    await addDoc(collection(db, "polls"), { qHi: `आज कौन सी टीम जीतेगी? ${teamName(m.aTeamId)} vs ${teamName(m.bTeamId)}`, qEn: `Who will win today's match? ${teamName(m.aTeamId)} vs ${teamName(m.bTeamId)}`, labels: [teamName(m.aTeamId), teamName(m.bTeamId)], counts: {}, open: true, matchId: m.id, createdAt: serverTimestamp(), t: Date.now() }); alert("✅"); }
+};
+
+// ---- ऑटो सिस्टम: समय आने पर LIVE, स्कोर न आने पर ऑटो ड्रॉ, पारी/मैच पूरा होने पर रिज़ल्ट ----
+let syncBusy = false;
+async function autoSync() {
+  if (syncBusy || !started) return; syncBusy = true;
+  try {
+    const now = Date.now(), dm = (+S.settings.drawMinutes > 0 ? +S.settings.drawMinutes : 60) * 60000, b = writeBatch(db); let n = 0;
+    S.matches.forEach(m => {
+      if (m.status === "upcoming") {
+        const due = !!m.whenISO && new Date(m.whenISO).getTime() <= now;
+        if (due && xiOK(m)) { b.update(doc(db, "matches", m.id), { status: "live", liveAt: now }); n++; }
+      } else if (m.status === "live") {
+        const li = liveInfo(m);
+        if (li.done) { const r = computeResult(m); if (r) { b.update(doc(db, "matches", m.id), { status: "done", winnerId: r.winnerId, res: r.res, result: "", endedAt: now }); n++; } return; }
+        const last = S.balls.reduce((mx, x) => x.matchId === m.id ? Math.max(mx, x.t || 0) : mx, 0) || m.liveAt || 0;
+        if (last && now - last > dm) { b.update(doc(db, "matches", m.id), { status: "draw", winnerId: "", res: { type: "draw", reason: "auto" }, result: "", endedAt: now }); n++; }
+      }
+    });
+    if (n) await b.commit();
+  } catch (e) { console.warn("autoSync", e.message); }
+  finally { syncBusy = false; }
+}
+setInterval(() => { autoSync(); }, 20000);
+
+function roundRobin(ids) { const a = [...ids]; if (a.length % 2) a.push(null); const n = a.length, out = []; for (let r = 0; r < n - 1; r++) { for (let i = 0; i < n / 2; i++) { const x = a[i], y = a[n - 1 - i]; if (x && y) out.push([x, y]); } a.splice(1, 0, a.pop()); } return out; }
+$("genBtn").onclick = () => {
+  const ids = [...document.querySelectorAll(".gt:checked")].map(c => c.value); if (ids.length < 2) { alert(tr("कम से कम 2 टीमें चुनें", "Select at least 2 teams")); return; }
+  const fx = roundRobin(ids).map(([a, b]) => ({ stage: "league", aTeamId: a, bTeamId: b, aLabel: "", bLabel: "" }));
+  if ($("genSemi").checked) { if (ids.length >= 4) fx.push({ stage: "semi", aTeamId: "", bTeamId: "", aLabel: "#1", bLabel: "#4" }, { stage: "semi", aTeamId: "", bTeamId: "", aLabel: "#2", bLabel: "#3" }, { stage: "final", aTeamId: "", bTeamId: "", aLabel: "W-SF1", bLabel: "W-SF2" }); else fx.push({ stage: "final", aTeamId: "", bTeamId: "", aLabel: "#1", bLabel: "#2" }); }
+  const start = $("genStart").value ? new Date($("genStart").value) : null, gap = (+$("genGap").value || 2) * 3600000;
+  genPlan = fx.map((f, i) => ({ ...f, whenISO: start ? toLocal(new Date(start.getTime() + i * gap)) : "", groundId: $("genGround").value, overs: +$("genOvers").value || cfg().overs }));
+  $("genPreview").innerHTML = `<div class="tw"><table><tr><th>#</th><th>${tr("स्टेज", "Stage")}</th><th>${tr("मैच", "Match")}</th><th>${tr("तारीख/समय", "Date/Time")}</th><th>${tr("ग्राउंड", "Ground")}</th></tr>${genPlan.map((f, i) => `<tr><td>${i + 1}</td><td>${stageLabel(f.stage)}</td><td>${esc(f.aTeamId ? teamName(f.aTeamId) : f.aLabel)} vs ${esc(f.bTeamId ? teamName(f.bTeamId) : f.bLabel)}</td><td><input type="datetime-local" data-gi="${i}" data-gf="w" value="${f.whenISO}"></td><td><select data-gi="${i}" data-gf="g">${groundOpts(f.groundId)}</select></td></tr>`).join("")}</table></div><button class="pri" id="genSave">${tr("शेड्यूल सेव करें", "Save Schedule")} (${genPlan.length})</button>`;
+  $("genSave").onclick = saveSchedule; applyLang();
+};
+$("genPreview").addEventListener("change", e => { const i = e.target.dataset.gi; if (i == null) return; if (e.target.dataset.gf === "w") genPlan[i].whenISO = e.target.value; else genPlan[i].groundId = e.target.value; });
+async function saveSchedule() {
+  const b = writeBatch(db), base = Date.now();
+  genPlan.forEach((f, i) => { const a = teamOf(f.aTeamId), t = teamOf(f.bTeamId), g = S.grounds.find(x => x.id === f.groundId);
+    b.set(doc(collection(db, "matches")), { ...f, aName: a?.name || "", bName: t?.name || "", groundName: g?.name || "", status: "upcoming", result: "", seq: base + i, t: base + i, createdAt: serverTimestamp() }); });
+  await b.commit(); genPlan = []; $("genPreview").innerHTML = `<div class="msg">✅ ${tr("शेड्यूल सेव हो गया", "Schedule saved")}</div>`;
+}
+$("fillSemi").onclick = async () => { const st = standings(), sm = S.matches.filter(m => m.stage === "semi"); if (st.length < 4 || sm.length < 2) { alert(tr("कम से कम 4 टीमें और 2 सेमी-फाइनल चाहिए", "Need 4 teams and 2 semi-finals")); return; }
+  const set = (m, a, b) => updateDoc(doc(db, "matches", m.id), { aTeamId: a.t.id, bTeamId: b.t.id, aName: a.t.name, bName: b.t.name }); await set(sm[0], st[0], st[3]); await set(sm[1], st[1], st[2]); };
+$("fillFinal").onclick = async () => { const sm = S.matches.filter(m => m.stage === "semi"), f = S.matches.find(m => m.stage === "final"); if (!f || sm.length < 2 || sm.some(m => !m.winnerId)) { alert(tr("दोनों सेमी-फाइनल पूरे होने चाहिए", "Both semi-finals must be finished")); return; }
+  await updateDoc(doc(db, "matches", f.id), { aTeamId: sm[0].winnerId, bTeamId: sm[1].winnerId, aName: teamName(sm[0].winnerId), bName: teamName(sm[1].winnerId) }); };
+$("mDelAll").onclick = async () => { if (!confirm(tr("सभी मैच हटाएं?", "Delete ALL matches?"))) return; const b = writeBatch(db); S.matches.forEach(m => b.delete(doc(db, "matches", m.id))); await b.commit(); };
+
+// ================= TEAMS =================
+function renderTeams() {
+  keepSel("tmCoach", `<option value="">—</option>` + S.coaches.map(c => `<option>${esc(c.name)}</option>`).join(""));
+  if (!$("tmPurse").value) $("tmPurse").placeholder = cfg().purse;
+  $("tmList").innerHTML = S.teams.map(t => `<div class="msg" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">${logo(t, 44)}<div style="flex:1"><b>${esc(t.name)}</b><br><small>${tr("कप्तान", "Captain")}: ${esc(t.captain || "—")} • ${tr("कोच", "Coach")}: ${esc(t.coach || "—")} • ${tr("मालिक", "Owner")}: ${esc(t.ownerName || "—")} ${esc(t.ownerEmail || "")} • ${tr("पर्स", "Purse")}: ${rupee(t.purse)}</small></div>
+    <button class="sm" data-purse="${t.id}">${tr("पर्स", "Purse")}</button><button class="sm" data-del="${t.id}">🗑</button></div>`).join("") || "—";
+}
+$("tmAdd").onclick = async () => {
+  const name = $("tmName").value.trim(); if (!name) return; const f = $("tmLogo").files[0], lg = f ? await compress(f, 300, .9, "image/png") : "", email = $("tmOwner").value.trim().toLowerCase();
+  const r = await addDoc(collection(db, "teams"), { name, captain: $("tmCap").value.trim(), coach: $("tmCoach").value, ownerName: $("tmOwnerName").value.trim(), ownerEmail: email, logo: lg, purse: +$("tmPurse").value || cfg().purse, createdAt: serverTimestamp(), t: Date.now() });
+  if (email) await setDoc(doc(db, "owners", email), { teamId: r.id }); ["tmName", "tmCap", "tmOwnerName", "tmOwner", "tmPurse", "tmLogo"].forEach(i => $(i).value = "");
+};
+$("tmList").onclick = async e => { const p = e.target.closest("[data-purse]")?.dataset.purse, d = e.target.closest("[data-del]")?.dataset.del;
+  if (p) { const v = prompt(tr("नया पर्स (₹)", "New purse (₹)")); if (v !== null && v !== "" && !isNaN(+v)) await updateDoc(doc(db, "teams", p), { purse: +v }); }
+  if (d) { const t = teamOf(d); if (confirm(tr("टीम हटाएं?", "Delete team?"))) { await deleteDoc(doc(db, "teams", d)); if (t?.ownerEmail) await deleteDoc(doc(db, "owners", t.ownerEmail)); } } };
+
+// ================= MEDIA =================
+function renderMedia() {
+  if (document.activeElement && ["spName", "nwText", "pQ", "pOpts"].includes(document.activeElement.id)) return;
+  $("spList").innerHTML = S.sponsors.map(s => `<div class="msg"><img src="${s.logo}" style="height:36px;vertical-align:middle;background:#fff;border-radius:4px"> ${esc(s.name)} <span class="tag role">${s.tier === "title" ? tr("टाइटल", "Title") : tr("को-स्पॉन्सर", "Co-sponsor")}</span> <button class="sm" data-d="sponsors|${s.id}">🗑</button></div>`).join("");
+  $("nwList").innerHTML = S.news.map(n => `<div class="msg">${esc(n.text)} <button class="sm" data-d="news|${n.id}">🗑</button></div>`).join("");
+  $("pList").innerHTML = S.polls.map(p => `<div class="msg">${esc(p.qHi || p.question || "")} ${p.open === false ? '<span class="tag rej">CLOSED</span>' : ""} <button class="sm" data-tg="${p.id}">${p.open === false ? tr("खोलें", "Open") : tr("बंद", "Close")}</button><button class="sm" data-d="polls|${p.id}">🗑</button></div>`).join("");
+  const pend = S.media.filter(m => m.status === "pending"), ok = S.media.filter(m => m.status !== "pending" && m.status !== "rejected");
+  const card = (m, pending) => `<div class="msg">${m.kind === "video" ? `<a href="${esc(m.url)}" target="_blank">🎬 ${esc(m.url)}</a>` : `<img class="th" src="${m.src}">`} ${esc(m.caption)} ${pending ? `<button class="sm ok" data-ap="${m.id}">${tr("Approve", "Approve")}</button><button class="sm bad" data-d="media|${m.id}">${tr("Reject", "Reject")}</button>` : `<button class="sm" data-d="media|${m.id}">🗑</button>`}</div>`;
+  $("gPending").innerHTML = pend.map(m => card(m, true)).join("") || "—"; $("gApproved").innerHTML = ok.map(m => card(m, false)).join("") || "—";
+}
+$("tMedia").onclick = async e => { const d = e.target.closest("[data-d]")?.dataset.d, ap = e.target.closest("[data-ap]")?.dataset.ap, tg = e.target.closest("[data-tg]")?.dataset.tg;
+  if (d) { const [c, id] = d.split("|"); await delDoc(c, id); } if (ap) await updateDoc(doc(db, "media", ap), { status: "approved" });
+  if (tg) await updateDoc(doc(db, "polls", tg), { open: S.polls.find(p => p.id === tg).open === false }); };
+$("spAdd").onclick = async () => { const f = $("spLogo").files[0], n = $("spName").value.trim(); if (!f || !n) { alert(tr("नाम और लोगो चुनें", "Enter name and logo")); return; }
+  await addDoc(collection(db, "sponsors"), { name: n, tier: $("spTier").value, logo: await compress(f, 400, .9, "image/png"), createdAt: serverTimestamp(), t: Date.now() }); $("spName").value = ""; $("spLogo").value = ""; };
+$("nwAdd").onclick = async () => { const t = $("nwText").value.trim(); if (t) { await addDoc(collection(db, "news"), { text: t, createdAt: serverTimestamp(), t: Date.now() }); $("nwText").value = ""; } };
+$("pAdd").onclick = async () => { const l = $("pOpts").value.split(",").map(s => s.trim()).filter(Boolean), q = $("pQ").value.trim(); if (!q || l.length < 2) { alert(tr("सवाल व कम से कम 2 विकल्प", "Question and at least 2 options")); return; }
+  await addDoc(collection(db, "polls"), { question: q, labels: l, counts: {}, open: true, createdAt: serverTimestamp(), t: Date.now() }); $("pQ").value = ""; $("pOpts").value = ""; };
+
+// ================= SETTINGS =================
+function renderSettings() {
+  const c = cfg(), s = S.settings, set = (id, v) => { if (document.activeElement !== $(id)) $(id).value = v ?? ""; };
+  set("setEntry", s.entryFee || ""); set("setUpi", s.upiId); set("setUpiName", s.upiName); set("setWa", s.adminWa || c.adminWa); set("setDate", s.startDate); set("setPurse", s.purse || ""); set("setBase", s.basePrice || ""); set("setSquad", s.squadSize || ""); set("setOvers", s.overs || ""); set("setWk", s.wicketsLimit || "");
+  $("gList").innerHTML = S.grounds.map(g => `<div class="msg">${esc(g.name)} – ${esc(g.addr || "")} <button class="sm" data-d="grounds|${g.id}">🗑</button></div>`).join("");
+  $("cList").innerHTML = S.coaches.map(x => `<div class="msg">${esc(x.name)} ${esc(x.phone || "")} <button class="sm" data-d="coaches|${x.id}">🗑</button></div>`).join("");
+}
+$("tSettings").onclick = e => { const d = e.target.closest("[data-d]")?.dataset.d; if (d) { const [c, id] = d.split("|"); delDoc(c, id); } };
+$("setSave").onclick = async () => {
+  const d = { entryFee: +$("setEntry").value || 0, upiId: $("setUpi").value.trim(), upiName: $("setUpiName").value.trim(), adminWa: $("setWa").value.trim(), startDate: $("setDate").value, purse: +$("setPurse").value || 0, basePrice: +$("setBase").value || 0, squadSize: +$("setSquad").value || 0, overs: +$("setOvers").value || 0, wicketsLimit: +$("setWk").value || 0 };
+  if ($("setQr").files[0]) d.qrImg = await compress($("setQr").files[0], 500, .9, "image/png");
+  await setDoc(doc(db, "settings", "main"), d, { merge: true }); $("setMsg").innerHTML = `<div class="msg">✅ ${tr("सेव हो गया", "Saved")}</div>`; };
+$("gAdd").onclick = async () => { if ($("gName").value.trim()) { await addDoc(collection(db, "grounds"), { name: $("gName").value.trim(), addr: $("gAddr").value.trim() }); $("gName").value = ""; $("gAddr").value = ""; } };
+$("gDefault").onclick = async () => { for (const [n, a] of [["Porsa Ground", "Porsa"], ["Jotai Ground", "Jotai"]]) if (!S.grounds.some(g => g.name === n)) await addDoc(collection(db, "grounds"), { name: n, addr: a }); };
+$("cAdd").onclick = async () => { if ($("cName").value.trim()) { await addDoc(collection(db, "coaches"), { name: $("cName").value.trim(), phone: $("cPhone").value.trim() }); $("cName").value = ""; $("cPhone").value = ""; } };
+$("cSubodh").onclick = async () => { if (!S.coaches.some(c => c.name === "सुबोध")) await addDoc(collection(db, "coaches"), { name: "सुबोध", phone: "" }); };
+
+// ================= SCANNER =================
+let stream = null, timer = null;
+const stopScan = () => { clearInterval(timer); stream?.getTracks().forEach(t => t.stop()); stream = null; };
+$("scanStop").onclick = stopScan;
+$("scanStart").onclick = async () => {
+  if (!("BarcodeDetector" in window)) { $("scanRes").innerHTML = `<div class="msg">${tr("इस ब्राउज़र में QR स्कैनर नहीं – ऊपर ID डालकर चेक करें", "QR scanning unsupported here – type the ID above")}</div>`; return; }
+  try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }); const v = $("scanVid"); v.srcObject = stream; await v.play(); const det = new BarcodeDetector({ formats: ["qr_code"] });
+    timer = setInterval(async () => { const c = await det.detect(v); if (c.length) { const r = c[0].rawValue; stopScan(); show(r.includes("p=") ? r.split("p=")[1].split("&")[0] : r); } }, 500);
+  } catch (e) { $("scanRes").innerHTML = `<div class="msg">${esc(e.message)}</div>`; }
+};
+$("scanManual").onclick = () => { const raw = $("scanId").value.trim(), p = S.players.find(x => pidOf(x.id) === raw.toUpperCase()) || S.players.find(x => x.id === raw); show(p ? p.id : raw); };
+function show(id) { const p = S.players.find(x => x.id === id), pr = S.priv[id] || {};
+  $("scanRes").innerHTML = p ? `<div class="msg"><img class="th" src="${p.photo}"> <b>${esc(p.name)}</b> • ${roleLabel(p.role)} • ${esc(p.village || "")} • ${esc(p.teamName || "—")}<br>${pidOf(p.id)} • ${esc(pr.mobile || "")}<br>${ps(p) === "paid" ? `<span class="tag paid">✅ ${tr("पेमेंट अप्रूव्ड – अंदर आने दें", "Payment approved – allow entry")}</span>` : ps(p) === "rejected" ? `<span class="tag rej">❌ ${tr("रिजेक्टेड", "Rejected")}</span>` : `<span class="tag pend">⏳ ${tr("पेंडिंग – पहले वेरिफाई करें", "Pending – verify first")}</span>`}</div>` : `<div class="msg">❌ ${tr("खिलाड़ी नहीं मिला", "Player not found")}</div>`; }
+applyLang();
+
+}
+
+onAuthStateChanged(auth, u => { window.__pubAuth && window.__pubAuth(u); if (location.hash === "#admin") window.__adminAuth && window.__adminAuth(u); });
+function route() {
+  const adm = location.hash === "#admin";
+  $("pubRoot").classList.toggle("hidden", adm); $("adminRoot").classList.toggle("hidden", !adm);
+  window.scrollTo(0, 0); if (adm && window.__adminAuth) window.__adminAuth(auth.currentUser);
+}
+window.addEventListener("hashchange", route); route();
+
+</script>
+</body>
+</html>
